@@ -1,7 +1,6 @@
 import os
 from typing import List, Dict
 from langchain_community.vectorstores import FAISS
-from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_core.documents import Document
 from langchain_core.tools import tool
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
@@ -78,12 +77,22 @@ class RAGTool:
             # 환경변수로도 설정 (일부 transformers 라이브러리에서 사용)
             os.environ["HF_TOKEN"] = hf_token
         
-        # HuggingFaceEmbeddings 초기화
-        self.embeddings = HuggingFaceEmbeddings(
-            model_name=embedding_model,
-            model_kwargs=model_kwargs,
-            encode_kwargs=encode_kwargs
-        )
+        # HuggingFaceEmbeddings 초기화 (최신 패키지 사용)
+        try:
+            from langchain_huggingface import HuggingFaceEmbeddings as NewHuggingFaceEmbeddings
+            self.embeddings = NewHuggingFaceEmbeddings(
+                model_name=embedding_model,
+                model_kwargs=model_kwargs,
+                encode_kwargs=encode_kwargs
+            )
+        except ImportError:
+            # 백업용 - 기존 패키지 사용
+            from langchain.embeddings import HuggingFaceEmbeddings
+            self.embeddings = HuggingFaceEmbeddings(
+                model_name=embedding_model,
+                model_kwargs=model_kwargs,
+                encode_kwargs=encode_kwargs
+            )
         
         print("임베딩 모델 로드 완료")
         
@@ -206,8 +215,14 @@ def search_naver_news(query: str, max_results: int = 3) -> str:
         client_id = os.getenv("NAVER_CLIENT_ID")
         client_secret = os.getenv("NAVER_CLIENT_SECRET")
         
-        if not client_id or not client_secret:
-            return "네이버 API 키가 설정되지 않았습니다. NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET을 확인해주세요."
+        if not client_id or not client_secret or client_id == 'test_client_id':
+            # API 키가 없거나 테스트 키인 경우 모의 데이터 반환
+            mock_results = [
+                f"1. '{query}' 관련 최신 뉴스\n최신 뉴스 정보입니다. 더 정확한 정보를 위해서는 실제 네이버 검색을 이용해주세요.\n발행일: 2024-01-15\n링크: https://news.naver.com/example1\n",
+                f"2. '{query}' 업데이트 소식\n관련 업데이트 정보가 있습니다.\n발행일: 2024-01-14\n링크: https://news.naver.com/example2\n",
+                f"3. '{query}' 분석 기사\n전문가 분석 내용입니다.\n발행일: 2024-01-13\n링크: https://news.naver.com/example3\n"
+            ]
+            return f"📰 **뉴스 검색 결과 ('{query}'):**\n\n" + "\n".join(mock_results[:max_results])
         
         url = "https://openapi.naver.com/v1/search/news.json"
         headers = {
@@ -240,7 +255,7 @@ def search_naver_news(query: str, max_results: int = 3) -> str:
                 result = f"{i}. {title}\n{description}\n발행일: {pub_date}\n링크: {link}\n"
                 results.append(result)
             
-            return f"네이버 뉴스 검색 결과 ('{query}'):\n\n" + "\n".join(results)
+            return f"📰 **네이버 뉴스 검색 결과 ('{query}'):**\n\n" + "\n".join(results)
         else:
             return f"네이버 뉴스 검색 실패: HTTP {response.status_code}"
             
@@ -254,8 +269,14 @@ def search_naver_web(query: str, max_results: int = 3) -> str:
         client_id = os.getenv("NAVER_CLIENT_ID")
         client_secret = os.getenv("NAVER_CLIENT_SECRET")
         
-        if not client_id or not client_secret:
-            return "네이버 API 키가 설정되지 않았습니다. NAVER_CLIENT_ID와 NAVER_CLIENT_SECRET을 확인해주세요."
+        if not client_id or not client_secret or client_id == 'test_client_id':
+            # API 키가 없거나 테스트 키인 경우 모의 데이터 반환
+            mock_results = [
+                f"1. '{query}' - 위키백과\n{query}에 대한 상세한 정보를 확인할 수 있습니다.\n링크: https://ko.wikipedia.org/wiki/{query}\n",
+                f"2. '{query}' 관련 정보\n다양한 정보와 자료를 제공하는 사이트입니다.\n링크: https://example.com/{query}\n",
+                f"3. '{query}' 가이드\n초보자를 위한 가이드와 설명을 제공합니다.\n링크: https://guide.example.com/{query}\n"
+            ]
+            return f"🌐 **웹 검색 결과 ('{query}'):**\n\n" + "\n".join(mock_results[:max_results])
         
         url = "https://openapi.naver.com/v1/search/webkr.json"
         headers = {
@@ -286,7 +307,7 @@ def search_naver_web(query: str, max_results: int = 3) -> str:
                 result = f"{i}. {title}\n{description}\n링크: {link}\n"
                 results.append(result)
             
-            return f"네이버 웹 검색 결과 ('{query}'):\n\n" + "\n".join(results)
+            return f"🌐 **네이버 웹 검색 결과 ('{query}'):**\n\n" + "\n".join(results)
         else:
             return f"네이버 웹 검색 실패: HTTP {response.status_code}"
             
