@@ -8,7 +8,7 @@ from .tools.SQL_create import SQLPostprocessChain
 from .tools.SQL_execute import SQLExecuteChain
 import json
 import re
-import streamlit as st
+# import streamlit as st
 
 # 🔹 환경 변수 로드 (.env에 OPENAI_API_KEY가 들어 있어야 함)
 load_dotenv()
