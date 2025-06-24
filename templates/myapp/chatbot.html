@@ -1,0 +1,178 @@
+{% load static %} {# Django 정적 파일 로드를 위해 필요 #}
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>⚽ Soccer Energies Company 챗봇</title>
+
+    <style>
+        /* 기본 레이아웃 및 스타일 */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        #sidebar { width: 250px; background-color: #f0f2f6; padding: 20px; overflow-y: auto; border-right: 1px solid #ddd; }
+        #main-content { flex-grow: 1; display: flex; flex-direction: column; padding: 20px; }
+        #chat-header { text-align: center; margin-bottom: 20px; }
+        #chat-window { flex-grow: 1; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 8px; padding: 15px; margin-bottom: 15px; background-color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .chat-message { margin-bottom: 10px; padding: 8px 12px; border-radius: 15px; max-width: 70%; word-wrap: break-word; }
+        .user-message { background-color: #DCF8C6; float: right; clear: both; text-align: right; margin-left: auto; }
+        .assistant-message { background-color: #E8E8E8; float: left; clear: both; text-align: left; }
+        .message-content { margin: 0; }
+        .message-role { font-weight: bold; margin-bottom: 5px; }
+        .message-image { max-width: 100%; height: auto; border-radius: 5px; margin-top: 5px; }
+        .spinner { text-align: center; padding: 10px; font-style: italic; color: #555; }
+        #input-area { display: flex; }
+        #user-input { flex-grow: 1; padding: 10px 15px; border: 1px solid #ccc; border-radius: 20px; outline: none; }
+        #submit-button { background-color: #4CAF50; color: white; border: none; padding: 10px 20px; border-radius: 20px; margin-left: 10px; cursor: pointer; transition: background-color 0.3s; }
+        #submit-button:hover { background-color: #45a049; }
+        .example-button { width: 100%; padding: 10px; margin-bottom: 8px; background-color: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; text-align: left; transition: background-color 0.2s; }
+        .example-button:hover { background-color: #0056b3; }
+    </style>
+</head>
+<body>
+    {# 🔹 왼쪽 사이드바 메뉴바 #}
+    <div id="sidebar">
+        <h2>📋 예시 질문</h2>
+        {% comment %} Django 템플릿에서 JS 변수로 전달할 수 있도록 data-question 속성을 사용합니다. {% endcomment %}
+        <button class="example-button" data-question="리오넬 메시에 대해 알려줘">리오넬 메시에 대해 알려줘</button>
+        <button class="example-button" data-question="호날두의 커리어는 어때?">호날두의 커리어는 어때?</button>
+        <button class="example-button" data-question="손흥민은 어떤 팀에서 뛰고 있어?">손흥민은 어떤 팀에서 뛰고 있어?</button>
+        <button class="example-button" data-question="네이마르의 특징은?">네이마르의 특징은?</button>
+        <button class="example-button" data-question="휴가를 사용 하는 방법이 있어?">휴가를 사용 하는 방법이 있어?</button>
+        <button class="example-button" data-question="출장을 갈 때 어떤 이동 수단을 타야하지?">출장을 갈 때 어떤 이동 수단을 타야하지?</button>
+        <button class="example-button" data-question="연차에 대한 규정 알려줘">연차에 대한 규정 알려줘</button>
+    </div>
+
+    {# 🔸 오른쪽: 채팅 인터페이스 #}
+    <div id="main-content">
+        <h1 id="chat-header">⚽ Soccer Energies Company 챗봇</h1>
+        <div id="chat-window">
+            {# 서버로부터 받아온 이전 대화 내용을 표시 (예: 페이지 로드 시) #}
+            {% for msg in chat_messages %}
+                <div class="chat-message {% if msg.role == 'user' %}user-message{% else %}assistant-message{% endif %}">
+                    <p class="message-role">{% if msg.role == 'user' %}User{% else %}Assistant{% endif %}</p>
+                    <div class="message-content">
+                        {% if msg.image_url %}
+                            <img src="{{ msg.image_url }}" alt="{{ msg.image_caption }}" class="message-image">
+                        {% endif %}
+                        {{ msg.content|safe }} {# HTML 태그가 있다면 safe 필터 사용 #}
+                    </div>
+                </div>
+            {% endfor %}
+            <div id="spinner" class="spinner" style="display: none;">🤖 답변을 생성하는 중입니다...</div>
+        </div>
+
+        {# 🔻 입력창 #}
+        <form id="chat-form">
+            <div id="input-area">
+                <input type="text" id="user-input" placeholder="축구선수/내부문서 이름 또는 질문을 입력하세요..." autocomplete="off">
+                <button type="submit" id="submit-button">전송</button>
+            </div>
+        </form>
+    </div>
+
+    {# JavaScript 코드 부분 #}
+    <script>
+        // ... (CSRF 토큰 함수 및 DOM 요소 참조는 동일) ...
+        // CSRF 토큰을 가져오는 함수 (Django 보안 필수)
+        function getCookie(name) { /* ... 코드 ... */ }
+        const csrfToken = getCookie('csrftoken');
+        const chatForm = document.getElementById('chat-form');
+        const userInput = document.getElementById('user-input');
+        const chatWindow = document.getElementById('chat-window');
+        const spinner = document.getElementById('spinner');
+        const exampleButtons = document.querySelectorAll('.example-button');
+
+        // 예시 버튼 클릭 이벤트 처리
+        exampleButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const question = button.dataset.question; // 버튼의 data-question 속성에서 질문 가져옴
+                userInput.value = question; // 입력 필드에 질문 채우기
+                chatForm.dispatchEvent(new Event('submit')); // 폼 제출 이벤트 강제 발생
+            });
+        });
+
+        chatForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const prompt = userInput.value.trim();
+            if (!prompt) return;
+
+            appendMessage('user', prompt);
+            userInput.value = '';
+            spinner.style.display = 'block';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            try {
+                // Django 뷰로 질문 전송 (AJAX POST 요청)
+                // 현재 페이지의 URL (myapp:chatbot_page)로 POST 요청을 보냅니다.
+                const response = await fetch('{% url "myapp:chatbot_page" %}', { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    },
+                    body: JSON.stringify({ question: prompt })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                spinner.style.display = 'none';
+
+                if (data.type === 'FM') {
+                    let fullResponseHtml = '';
+                    if (data.replies && data.replies.length > 0) {
+                        for (const item of data.replies) {
+                            if (item.image_url) {
+                                appendMessage('assistant', `<img src="${item.image_url}" alt="${item.name} 사진" class="message-image">`, item.name);
+                            } else {
+                                appendMessage('assistant', `${item.name}의 이미지를 불러올 수 없습니다.`, item.name);
+                            }
+                            appendMessage('assistant', `<h3>${item.name}</h3><p>${item.description}</p>`, item.name);
+                        }
+                    } else {
+                            appendMessage('assistant', '죄송합니다. 축구선수 정보를 찾을 수 없습니다.');
+                    }
+                } else if (data.type === 'HR') {
+                    appendMessage('assistant', data.answer);
+                } else {
+                    appendMessage('assistant', data.answer);
+                }
+
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            } catch (error) {
+                console.error('Error sending message:', error);
+                spinner.style.display = 'none';
+                appendMessage('assistant', '죄송합니다, 답변을 가져오는 데 문제가 발생했습니다.', '오류');
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }
+        });
+
+        // 메시지를 채팅창에 추가하는 헬퍼 함수
+        function appendMessage(role, content, title = '') {
+            const messageDiv = document.createElement('div');
+            messageDiv.classList.add('chat-message');
+            messageDiv.classList.add(role === 'user' ? 'user-message' : 'assistant-message');
+
+            const roleP = document.createElement('p');
+            roleP.classList.add('message-role');
+            roleP.textContent = role === 'user' ? 'User' : 'Assistant';
+            messageDiv.appendChild(roleP);
+
+            const contentDiv = document.createElement('div');
+            contentDiv.classList.add('message-content');
+            contentDiv.innerHTML = content;
+            messageDiv.appendChild(contentDiv);
+
+            chatWindow.appendChild(messageDiv);
+        }
+
+        // 페이지 로드 시 스크롤 최하단으로
+        window.onload = function() {
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+        };
+    </script>
+</body>
+</html>
