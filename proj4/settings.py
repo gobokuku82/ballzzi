@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-fy7+m_qs8ji$o%-ruqmaw*l7q+9mgsr_tkj0u5*j+3nek03ul+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['34.47.77.200', 'www.google.com'] # vm 외부 ip
+ALLOWED_HOSTS = ['34.47.77.200', 'www.google.com','127.0.0.1', 'localhost'] # vm 외부 ip
 
 
 # Application definition
@@ -163,11 +163,9 @@ LOGIN_REDIRECT_URL = '/' # 로그인 성공 후 리다이렉트 될 URL
 ACCOUNT_LOGOUT_REDIRECT_URL = '/' # 로그아웃 후 리다이렉트 될 URL
 
 # Allauth 기타 설정 (필요에 따라 추가/변경)
-ACCOUNT_AUTHENTICATION_METHOD = 'username_email' # 로그인 시 사용자 이름 또는 이메일 사용
-ACCOUNT_EMAIL_REQUIRED = True # 회원가입 시 이메일 필수
+ACCOUNT_LOGIN_METHODS = {'username', 'email'} # 로그인 시 사용자 이름 또는 이메일 사용
+ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*'] # 회원가입 필드 설정
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # 이메일 인증 필수 ('optional' 또는 'none'도 가능)
-ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True # 회원가입 시 비밀번호 두 번 입력
-ACCOUNT_USERNAME_REQUIRED = True # 사용자 이름 필수
 ACCOUNT_SESSION_REMEMBER = True # 로그인 유지 기능
 ACCOUNT_UNIQUE_EMAIL = True # 이메일 중복 허용 안 함
 
@@ -189,3 +187,14 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['email', 'profile'],
     },
 }
+
+# 네이버 검색 API 설정
+import os
+NAVER_API = {
+    'client_id': os.getenv('NAVER_CLIENT_ID', 'test_client_id'),
+    'secret': os.getenv('NAVER_CLIENT_SECRET', 'test_client_secret'),
+}
+
+# 환경변수 직접 설정 (개발용)
+os.environ.setdefault('NAVER_CLIENT_ID', 'test_client_id')
+os.environ.setdefault('NAVER_CLIENT_SECRET', 'test_client_secret')

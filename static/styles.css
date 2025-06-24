@@ -87,6 +87,26 @@ body {
     width: 100%;
 }
 
+/* 챗봇 링크 특별 스타일 */
+.chatbot-link {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white !important;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.chatbot-link:hover {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.chatbot-link::after {
+    display: none;
+}
+
 .hamburger {
     display: none;
     flex-direction: column;
