@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/dompurify@2.4.0/dist/purify.min.js"></script>
@@ -157,25 +157,33 @@
             if (data.type === 'FM') {
                 if (data.replies && data.replies.length > 0) {
                     for (const item of data.replies) {
-                        // 설명 부분만 마크다운으로 변환
+                        // 상세 설명 부분만 먼저 마크다운으로 변환합니다.
                         const descriptionHtml = DOMPurify.sanitize(marked.parse(item.description));
+
+                        // 새로운 HTML 구조를 생성합니다.
+                        let content = `
+                            <div class="response-container">
+                                <div class="response-header">
+                                    <img src="${item.image_url || ''}" alt="${item.name} 사진" class="message-image">
+                                    <div class="response-title">
+                                        <strong>${item.name}</strong>
+                                    </div>
+                                </div>
+                                <div class="response-body">
+                                    ${descriptionHtml}
+                                </div>
+                            </div>
+                        `;
                         
-                        let content = `<strong>${item.name}</strong><br>${descriptionHtml}`;
-                        
-                        if (item.image_url) {
-                            content = `<img src="${item.image_url}" alt="${item.name} 사진" class="message-image">${content}`;
-                        }
                         appendMessage('assistant', content);
                     }
                 } else {
                     appendMessage('assistant', '죄송합니다. 축구선수 정보를 찾을 수 없습니다. 다른 선수나 질문을 시도해보세요.');
                 }
             } else if (data.type === 'HR') {
-                // 답변 전체를 마크다운으로 변환
                 const answerHtml = DOMPurify.sanitize(marked.parse(data.answer));
                 appendMessage('assistant', answerHtml);
             } else {
-                // 기타 답변도 마크다운으로 변환
                 const defaultAnswerHtml = DOMPurify.sanitize(marked.parse(data.answer || '죄송합니다. 응답을 처리하는 중 문제가 발생했습니다.'));
                 appendMessage('assistant', defaultAnswerHtml);
             }
