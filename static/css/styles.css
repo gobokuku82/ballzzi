@@ -997,3 +997,20 @@ main {
     padding-top: 80px; 
 
 }
+.assistant-message .message-bubble h1,
+.assistant-message .message-bubble h2,
+.assistant-message .message-bubble h3 {
+    margin: 15px 0 10px 0;
+    color: #667eea;
+    font-weight: 600;
+}
+
+.assistant-message .message-bubble strong {
+    color: #6a5acd;
+    font-weight: 700;
+}
+
+.assistant-message .message-bubble ul {
+    margin: 10px 0;
+    padding-left: 25px;
+}
