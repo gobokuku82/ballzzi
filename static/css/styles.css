@@ -1051,74 +1051,59 @@ section {
     font-size: 0.95rem;
 }
 
-/* --- AI 답변 레이아웃 개선 --- */
-.message-image { 
-    width: 80px; 
-    height: 80px;
-    object-fit: cover;
-    border-radius: 15px;
-    margin-right: 15px;
-    border: 1px solid #eee;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    flex-shrink: 0;
-}
-.response-container {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-.response-header {
-    display: flex;
-    align-items: center;
-}
-.response-title strong {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #333;
-}
-.response-body {
-    padding-top: 10px;
-    border-top: 1px solid #f0f0f0;
+/* --- 마크다운 스타일 --- */
+.assistant-message .message-bubble {
+    /* ... 다른 속성은 그대로 ... */
+    white-space: pre-wrap;
+    font-size: 1.5rem; /* 폰트 크기 키움 */
+    line-height: 2; /* 줄 간격 좁힘 */
 }
 
-/* --- 마크다운 스타일 --- */
 .assistant-message .message-bubble h1,
 .assistant-message .message-bubble h2,
 .assistant-message .message-bubble h3 {
-    margin: 15px 0 10px 0;
+    margin: 4px 0 4px 0; /* 제목 위아래 여백 줄임 */
     color: #667eea;
     font-weight: 600;
+    line-height: 1.4; /* 제목 줄간격은 별도 조정 */
 }
+
 .assistant-message .message-bubble p {
-    margin: 10px 0;
+    margin: 2px 0; /* 단락 위아래 여백 줄임 */
 }
+
 .assistant-message .message-bubble ul,
 .assistant-message .message-bubble ol {
     margin: 10px 0;
     padding-left: 25px;
 }
+
 .assistant-message .message-bubble li {
-    margin: 8px 0;
-    line-height: 1.7;
+    margin: 3px 0; /* 리스트 아이템 위아래 여백 줄임 */
 }
+
 .assistant-message .message-bubble strong {
     color: #6a5acd;
     font-weight: 700;
 }
+
 .assistant-message .message-bubble em {
     font-style: italic;
     color: #555;
 }
+
 .assistant-message .message-bubble a {
     color: #764ba2;
     text-decoration: none;
     font-weight: 500;
     border-bottom: 1px dotted #764ba2;
 }
+
 .assistant-message .message-bubble a:hover {
     color: #667eea;
     border-bottom-style: solid;
 }
+
 .assistant-message .message-bubble code {
     background: #e9ecef;
     padding: 3px 6px;
@@ -1127,6 +1112,7 @@ section {
     font-size: 0.9em;
     color: #333;
 }
+
 .assistant-message .message-bubble pre {
     background: #2d2d2d;
     color: #f8f8f2;
@@ -1135,12 +1121,15 @@ section {
     margin: 15px 0;
     overflow-x: auto;
     white-space: pre-wrap;
+    line-height: 1.5;
 }
+
 .assistant-message .message-bubble pre code {
     background: none;
     padding: 0;
     color: inherit;
 }
+
 .assistant-message .message-bubble blockquote {
     border-left: 4px solid #c3cfe2;
     padding-left: 15px;
@@ -1333,7 +1322,7 @@ section {
     .chat-window {
         padding: 15px;
         border-radius: 15px;
-        margin-bottom: 15px;
+        margin-bottom: 8px;
     }
     .chat-header {
         height: 60px;
@@ -1433,4 +1422,64 @@ section {
         width: 60px;
         height: 60px;
     }
+}
+/* =================================================================
+   5. 챗봇 답변 그리드 레이아웃 (추가)
+   ================================================================= */
+
+/* Grid 레이아웃의 전체 컨테이너 */
+.response-grid-container {
+    display: grid;
+    /* 2개의 열(column)을 만듭니다. 첫 열은 내용에 맞게, 두 번째 열은 남은 공간을 모두 차지합니다. */
+    grid-template-columns: auto 1fr; 
+    /* 2개의 행(row)을 만듭니다. 각 행의 높이는 내용에 따라 자동으로 조절됩니다. */
+    grid-template-rows: auto auto;
+    /* 그리드 셀 사이의 간격입니다. */
+    gap: 10px 15px; /* 세로 간격 10px, 가로 간격 15px */
+}
+
+/* 1사분면: 이미지 영역 */
+.grid-item-image {
+    grid-column: 1 / 2; /* 첫 번째 세로줄에서 시작해서 두 번째 세로줄에서 끝남 (1열 차지) */
+    grid-row: 1 / 2;    /* 첫 번째 가로줄에서 시작해서 두 번째 가로줄에서 끝남 (1행 차지) */
+}
+
+/* 그리드 레이아웃 안의 이미지 스타일 */
+.message-image-grid {
+    width: 250px;
+    height: 250px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* 2사분면: 간단한 정보 영역 */
+.grid-item-summary {
+    grid-column: 2 / 3; /* 2열 차지 */
+    grid-row: 1 / 2;    /* 1행 차지 */
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* 내용을 세로 중앙에 배치 */
+}
+
+.grid-item-summary strong {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.grid-item-summary .summary-position {
+    font-size: 1rem;
+    color: #667eea;
+    font-weight: 500;
+    margin-top: 5px;
+}
+
+/* 3, 4사분면: 상세 정보 영역 */
+.grid-item-details {
+    /* 첫 번째 세로줄에서 시작해서 세 번째 세로줄에서 끝남 (1열과 2열을 모두 차지) */
+    grid-column: 1 / 3; 
+    grid-row: 2 / 3;    /* 2행 차지 */
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0; /* 상단 영역과 구분선 */
 }

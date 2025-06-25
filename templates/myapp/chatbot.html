@@ -157,21 +157,27 @@
             if (data.type === 'FM') {
                 if (data.replies && data.replies.length > 0) {
                     for (const item of data.replies) {
-                        // 상세 설명 부분만 먼저 마크다운으로 변환합니다.
+                        // 상세 설명 부분만 마크다운으로 변환
                         const descriptionHtml = DOMPurify.sanitize(marked.parse(item.description));
+                        // 간단한 정보 (선수 이름)
+                        const summaryHtml = `<strong>${item.name}</strong>`;
 
-                        // 새로운 HTML 구조를 생성합니다.
+                        // CSS Grid를 위한 새로운 HTML 구조 생성
                         let content = `
-                            <div class="response-container">
-                                <div class="response-header">
-                                    <img src="${item.image_url || ''}" alt="${item.name} 사진" class="message-image">
-                                    <div class="response-title">
-                                        <strong>${item.name}</strong>
-                                    </div>
+                            <div class="response-grid-container">
+                                
+                                <div class="grid-item-image">
+                                    <img src="${item.image_url || ''}" alt="${item.name} 사진" class="message-image-grid">
                                 </div>
-                                <div class="response-body">
+
+                                <div class="grid-item-summary">
+                                    ${summaryHtml}
+                                    <p class="summary-position">${item.position || '공격수'}</p> </div>
+
+                                <div class="grid-item-details">
                                     ${descriptionHtml}
                                 </div>
+
                             </div>
                         `;
                         
