@@ -43,6 +43,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'myapp',
+
+    ## Django Allauth에 필요한 앱들
+    'django.contrib.sites', # Allauth는 Site 프레임워크를 사용합니다.
+    'allauth',
+    'allauth.account', # 일반적인 계정 관리 (회원가입, 로그인 등)
+    'allauth.socialaccount', # 소셜 계정 관리
+    'allauth.socialaccount.providers.google',
+    ## 'allauth_naver'
 ]
 
 MIDDLEWARE = [
@@ -53,8 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
-
+    'allauth.account.middleware.AccountMiddleware',  # <-- 이 줄을 추가해주세요!
 ]
 
 ROOT_URLCONF = 'proj4.urls'
@@ -158,7 +165,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = '/' # 로그아웃 후 리다이렉트 될 URL
 # Allauth 기타 설정 (필요에 따라 추가/변경)
 ACCOUNT_LOGIN_METHODS = {'username', 'email'} # 로그인 시 사용자 이름 또는 이메일 사용
 ACCOUNT_SIGNUP_FIELDS = ['email*', 'username*', 'password1*', 'password2*'] # 회원가입 필드 설정
-ACCOUNT_EMAIL_VERIFICATION = 'mandatory' # 이메일 인증 필수 ('optional' 또는 'none'도 가능)
+ACCOUNT_EMAIL_VERIFICATION = 'none' # 이메일 인증 필수 ('optional' 또는 'none'도 가능)
 ACCOUNT_SESSION_REMEMBER = True # 로그인 유지 기능
 ACCOUNT_UNIQUE_EMAIL = True # 이메일 중복 허용 안 함
 
@@ -180,6 +187,8 @@ SOCIALACCOUNT_PROVIDERS = {
         'SCOPE': ['email', 'profile'],
     },
 }
+
+LOGIN_URL = '/accounts/login/' # ✨ 로그인 페이지의 URL
 
 # 네이버 검색 API 설정
 import os

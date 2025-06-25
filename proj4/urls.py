@@ -22,4 +22,5 @@ urlpatterns = [
     path('', main_view, name="home"),  # 홈페이지
     path('admin/', admin.site.urls),
     path('chatbot/', include('myapp.urls')), # 챗봇 URL
+    path('accounts/', include('allauth.urls')), # <--- allauth URL 추가
 ]

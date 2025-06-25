@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+
+{% block title %}로그인 - Ballzzi{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-form-wrapper">
+        <h1>로그인</h1>
+        <p>계정이 없으신가요? <a href="{% url 'account_signup' %}">회원가입</a></p>
+
+        <form class="auth-form" method="POST" action="{% url 'account_login' %}">
+            {% csrf_token %}
+
+            <div class="form-field-wrapper">
+                <label for="{{ form.login.id_for_label }}">로그인:</label>
+                {{ form.login }}
+            </div>
+            
+            <div class="form-field-wrapper">
+                <label for="{{ form.password.id_for_label }}">비밀번호:</label>
+                {{ form.password }}
+            </div>
+            
+            <button class="form-button" type="submit">로그인</button>
+            
+        </form>
+
+        <div class="auth-links">
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+            <a href="{% provider_login_url 'google' %}">
+                <button type="button" class="form-button" style="background: #db4437;">구글로 로그인</button>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -2,6 +2,8 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.decorators import login_required # ✨ 1. 이 부분을 import 합니다.
+
 import json
 
 # Create your views here.
@@ -30,6 +32,8 @@ from .source.HR.agents.agent_executor import process_query # HR 폴더 안의 ag
 # ==========================================================
 
 @csrf_exempt
+@login_required # ✨ 2. 뷰 함수 바로 위에 이 '딱지'를 붙여줍니다.
+
 def chatbot_page(request):
     if request.method == 'POST':
         try:

@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ballzzi - RAG 기반 LLM 챗봇</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -33,9 +33,15 @@
                 <li class="nav-item">
                     <a href="#about" class="nav-link">회사정보</a>
                 </li>
-                <li class="nav-item">
-                    <a href="/chatbot/" class="nav-link chatbot-link">🤖 Login</a>
-                </li>
+                {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a href="{% url 'account_logout' %}" class="nav-link chatbot-link">🤖 Logout</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a href="{% url 'account_login' %}" class="nav-link chatbot-link">🤖 Login</a>
+                    </li>
+                {% endif %}
             </ul>
             <div class="hamburger">
                 <span class="bar"></span>
@@ -263,6 +269,6 @@
         </div>
     </div>
 
-    <script src="{% static 'script.js' %}"></script>
+    <script src="{% static 'js/script.js' %}"></script>
 </body>
 </html> 
