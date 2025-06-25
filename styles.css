@@ -100,26 +100,6 @@ body {
     width: 100%;
 }
 
-/* 챗봇 링크 특별 스타일 */
-.chatbot-link {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white !important;
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-weight: 600;
-    transition: all 0.3s ease;
-}
-
-.chatbot-link:hover {
-    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
-}
-
-.chatbot-link::after {
-    display: none;
-}
-
 .hamburger {
     display: none;
     flex-direction: column;
@@ -512,7 +492,7 @@ section {
 
 .contact-icon {
     margin-right: 20px;
-    min-width: 40px;
+    min-width: 50px;
 }
 
 .contact-icon-img {
@@ -520,7 +500,7 @@ section {
     height: 40px;
     object-fit: contain;
     border-radius: 8px;
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    background: white;
     padding: 8px;
     transition: transform 0.3s ease;
 }
@@ -556,8 +536,8 @@ section {
 .footer-logo {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    align-items: center;
+    text-align: center;
 }
 
 .footer-logo-img {
@@ -567,6 +547,7 @@ section {
     border-radius: 12px;
     background: rgba(255, 255, 255, 0.1);
     padding: 10px;
+    margin-bottom: 15px;
 }
 
 .footer-logo h3 {
@@ -614,16 +595,21 @@ section {
     justify-content: center;
 }
 
-.footer-social a {
+.social-link {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 50px;
+    height: 50px;
     background: #34495e;
-    color: white;
-    border-radius: 50%;
+    border-radius: 12px;
     transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-link:hover {
+    background: #667eea;
+    transform: translateY(-3px);
 }
 
 .social-icon-img {
@@ -631,17 +617,8 @@ section {
     height: 30px;
     object-fit: contain;
     border-radius: 6px;
-    filter: brightness(0) invert(1);
-    transition: filter 0.3s ease;
-}
-
-.footer-social a:hover .social-icon-img {
-    filter: brightness(1) invert(0);
-}
-
-.footer-social a:hover {
-    background: #667eea;
-    transform: translateY(-3px);
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
 }
 
 .footer-bottom {
@@ -710,6 +687,11 @@ section {
         font-size: 1.1rem;
     }
     
+    .hero-logo-img {
+        width: 80px;
+        height: 80px;
+    }
+    
     .section-title {
         font-size: 2rem;
     }
@@ -745,5 +727,16 @@ section {
     
     section {
         padding: 60px 0;
+    }
+    
+    .service-icon-img,
+    .feature-icon-img {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .contact-icon-img {
+        width: 30px;
+        height: 30px;
     }
 } 

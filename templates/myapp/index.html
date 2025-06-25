@@ -14,7 +14,8 @@
     <nav class="navbar">
         <div class="nav-container">
             <div class="nav-logo">
-                <h2>GOLDENKICK</h2>
+                <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi Logo" class="logo-img">
+                <h2>Ballzzi</h2>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
@@ -47,8 +48,11 @@
     <!-- 메인 홈 섹션 -->
     <section id="home" class="hero-section">
         <div class="hero-content">
-            <h1 class="hero-title">SPORTS AGENCY</h1>
-            <p class="hero-subtitle">고객의 승리가 우리의 승리다</p>
+            <div class="hero-logo">
+                <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi" class="hero-logo-img">
+            </div>
+            <h1 class="hero-title">RAG 기반 LLM 챗봇</h1>
+            <p class="hero-subtitle">차세대 인공지능 기술로 더 스마트한 대화를 경험하세요</p>
             <button class="cta-button">🤖 AI 챗봇 사용하기</button>
         </div>
         <div class="scroll-indicator">
@@ -76,7 +80,7 @@
             <div class="service-box">
                 <div class="service-card main-service">
                     <div class="service-icon">
-                        <i class="fas fa-robot"></i>
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi AI" class="service-icon-img">
                     </div>
                     <h3>RAG 기반 AI 챗봇</h3>
                     <p>검색 증강 생성(RAG) 기술을 활용한 정확하고 신뢰할 수 있는 AI 어시스턴트입니다. 실시간 정보 검색과 생성형 AI의 장점을 결합하여 더욱 정확한 답변을 제공합니다.</p>
@@ -93,7 +97,7 @@
             <div class="features-grid">
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-search"></i>
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="고급 검색" class="feature-icon-img">
                     </div>
                     <h3>고급 검색 기능</h3>
                     <p>벡터 데이터베이스를 활용한 의미 기반 검색으로 더욱 정확한 정보를 찾아 제공합니다.</p>
@@ -101,7 +105,7 @@
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-brain"></i>
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="지능형 대화" class="feature-icon-img">
                     </div>
                     <h3>지능형 대화</h3>
                     <p>맥락을 이해하고 자연스러운 대화를 통해 사용자의 의도를 정확히 파악합니다.</p>
@@ -109,7 +113,7 @@
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">
-                        <i class="fas fa-shield-alt"></i>
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="신뢰할 수 있는 답변" class="feature-icon-img">
                     </div>
                     <h3>신뢰할 수 있는 답변</h3>
                     <p>검증된 데이터 소스를 기반으로 정확하고 신뢰할 수 있는 정보를 제공합니다.</p>
@@ -154,28 +158,36 @@
                 <h3>연락처 정보</h3>
                 <div class="contact-grid">
                     <div class="contact-item">
-                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="contact-icon">
+                            <img src="{% static 'icons/ballzzi.png' %}" alt="주소" class="contact-icon-img">
+                        </div>
                         <div>
                             <h4>주소</h4>
                             <p>서울시 강남구 테헤란로 123번길 45</p>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-phone"></i>
+                        <div class="contact-icon">
+                            <img src="{% static 'icons/ballzzi.png' %}" alt="전화번호" class="contact-icon-img">
+                        </div>
                         <div>
                             <h4>전화번호</h4>
                             <p>02-1234-5678</p>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-envelope"></i>
+                        <div class="contact-icon">
+                            <img src="{% static 'icons/ballzzi.png' %}" alt="이메일" class="contact-icon-img">
+                        </div>
                         <div>
                             <h4>이메일</h4>
                             <p>contact@ballzzi.com</p>
                         </div>
                     </div>
                     <div class="contact-item">
-                        <i class="fas fa-globe"></i>
+                        <div class="contact-icon">
+                            <img src="{% static 'icons/ballzzi.png' %}" alt="웹사이트" class="contact-icon-img">
+                        </div>
                         <div>
                             <h4>웹사이트</h4>
                             <p>www.ballzzi.com</p>
@@ -191,6 +203,7 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-logo">
+                    <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi" class="footer-logo-img">
                     <h3>Ballzzi</h3>
                     <p>RAG 기반 LLM 챗봇의 선두주자</p>
                 </div>
@@ -222,10 +235,18 @@
                     </div>
                 </div>
                 <div class="footer-social">
-                    <a href="#"><i class="fab fa-facebook"></i></a>
-                    <a href="#"><i class="fab fa-twitter"></i></a>
-                    <a href="#"><i class="fab fa-linkedin"></i></a>
-                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#" class="social-link">
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="Facebook" class="social-icon-img">
+                    </a>
+                    <a href="#" class="social-link">
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="Twitter" class="social-icon-img">
+                    </a>
+                    <a href="#" class="social-link">
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="LinkedIn" class="social-icon-img">
+                    </a>
+                    <a href="#" class="social-link">
+                        <img src="{% static 'icons/ballzzi.png' %}" alt="GitHub" class="social-icon-img">
+                    </a>
                 </div>
             </div>
             <div class="footer-bottom">
