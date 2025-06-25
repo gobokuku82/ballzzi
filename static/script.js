@@ -196,6 +196,42 @@ document.addEventListener('DOMContentLoaded', function() {
     
     window.addEventListener('scroll', updateScrollProgress);
     
+    // 플로팅 챗봇 기능
+    const floatingChatbot = document.getElementById('floating-chatbot');
+    const heroLogo = document.querySelector('.hero-logo');
+    
+    if (floatingChatbot) {
+        // 플로팅 챗봇 클릭 이벤트
+        floatingChatbot.addEventListener('click', function() {
+            window.location.href = '/chatbot/';
+        });
+        
+        // 스크롤 시 히어로 로고와 플로팅 챗봇 전환
+        window.addEventListener('scroll', function() {
+            const heroSection = document.getElementById('home');
+            if (heroSection && heroLogo) {
+                const heroBottom = heroSection.offsetTop + heroSection.offsetHeight;
+                const scrollPosition = window.scrollY + window.innerHeight * 0.3;
+                
+                if (scrollPosition > heroBottom) {
+                    // 히어로 섹션을 벗어나면 히어로 로고 숨기고 플로팅 챗봇 표시
+                    heroLogo.classList.add('hidden');
+                    floatingChatbot.style.opacity = '1';
+                    floatingChatbot.style.transform = 'scale(1)';
+                } else {
+                    // 히어로 섹션 내에서는 히어로 로고 표시하고 플로팅 챗봇 숨기기
+                    heroLogo.classList.remove('hidden');
+                    floatingChatbot.style.opacity = '0';
+                    floatingChatbot.style.transform = 'scale(0.8)';
+                }
+            }
+        });
+        
+        // 초기 상태 설정
+        floatingChatbot.style.opacity = '0';
+        floatingChatbot.style.transform = 'scale(0.8)';
+    }
+    
     // 모바일에서 터치 제스처 개선
     let touchStartY = 0;
     document.addEventListener('touchstart', function(e) {

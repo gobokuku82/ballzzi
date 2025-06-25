@@ -42,14 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # Django Allauth에 필요한 앱들
-    'django.contrib.sites', # Allauth는 Site 프레임워크를 사용합니다.
-    'allauth',
-    'allauth.account', # 일반적인 계정 관리 (회원가입, 로그인 등)
-    'allauth.socialaccount', # 소셜 계정 관리
-    'allauth.socialaccount.providers.google',
     'myapp',
-    # 'allauth_naver'
 ]
 
 MIDDLEWARE = [
@@ -60,7 +53,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware',  # <-- 이 줄을 추가해주세요!
+
 
 ]
 

@@ -19,8 +19,7 @@ from django.urls import path, include
 from myapp.views import main_view
 
 urlpatterns = [
-    path('', main_view, name="home"),  # myapp의 urls.py를 포함
+    path('', main_view, name="home"),  # 홈페이지
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')), # <--- allauth URL 추가
-    path('chatbot/', include('myapp.urls')), # <--- 챗봇 URL 추가
+    path('chatbot/', include('myapp.urls')), # 챗봇 URL
 ]

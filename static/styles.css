@@ -675,6 +675,147 @@ section {
     }
 }
 
+/* 플로팅 챗봇 아이콘 */
+.floating-chatbot {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+    transition: all 0.3s ease;
+    animation: float 3s ease-in-out infinite;
+}
+
+.floating-chatbot:hover {
+    transform: scale(1.1);
+    box-shadow: 0 15px 40px rgba(102, 126, 234, 0.5);
+}
+
+.floating-chatbot-img {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px;
+    filter: brightness(1.2);
+}
+
+/* 플로팅 챗봇 툴팁 */
+.floating-tooltip {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 14px 20px;
+    border-radius: 16px;
+    font-size: 0.95rem;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 
+        0 12px 35px rgba(102, 126, 234, 0.4),
+        0 4px 15px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    z-index: 1001;
+    pointer-events: none;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    font-family: 'Noto Sans KR', sans-serif;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.tooltip-text {
+    display: inline-block;
+    position: relative;
+}
+
+.tooltip-text strong {
+    color: #fff;
+    font-weight: 700;
+    text-shadow: 
+        0 1px 3px rgba(0, 0, 0, 0.3),
+        0 0 10px rgba(255, 255, 255, 0.2);
+    background: linear-gradient(45deg, #fff, #f0f8ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.floating-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.3) 0%, transparent 50%, rgba(255, 255, 255, 0.1) 100%);
+    border-radius: 18px;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.floating-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    right: 24px;
+    border: 10px solid transparent;
+    border-top: 12px solid #667eea;
+    filter: drop-shadow(0 3px 6px rgba(102, 126, 234, 0.3));
+}
+
+.floating-chatbot:hover .floating-tooltip {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1.02);
+}
+
+.floating-chatbot:hover .floating-tooltip::before {
+    opacity: 1;
+}
+
+/* 추가 호버 효과 */
+.floating-tooltip:hover {
+    transform: translateY(-2px) scale(1.05);
+    box-shadow: 
+        0 16px 45px rgba(102, 126, 234, 0.5),
+        0 8px 25px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* 플로팅 애니메이션 */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* 스크롤 시 히어로 로고 숨기기 */
+.hero-logo.hidden {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.5s ease;
+}
+
 /* 반응형 디자인 */
 @media (max-width: 768px) {
     .hamburger {
@@ -745,5 +886,41 @@ section {
     
     section {
         padding: 60px 0;
+    }
+    
+    /* 모바일에서 플로팅 챗봇 크기 조정 */
+    .floating-chatbot {
+        width: 60px;
+        height: 60px;
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    .floating-chatbot-img {
+        width: 35px;
+        height: 35px;
+    }
+    
+    /* 모바일에서 툴팁 조정 */
+    .floating-tooltip {
+        font-size: 0.85rem;
+        padding: 12px 16px;
+        bottom: 75px;
+        right: -15px;
+        max-width: 220px;
+        white-space: normal;
+        text-align: center;
+        border-radius: 14px;
+        letter-spacing: 0.2px;
+        line-height: 1.4;
+        box-shadow: 
+            0 8px 25px rgba(102, 126, 234, 0.35),
+            0 3px 12px rgba(0, 0, 0, 0.12);
+    }
+    
+    .floating-tooltip::after {
+        right: 28px;
+        border: 8px solid transparent;
+        border-top: 10px solid #667eea;
     }
 } 

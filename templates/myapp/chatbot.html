@@ -70,12 +70,13 @@
         
                  /* 메인 컨테이너 */
          .chat-container {
-             max-width: 1400px;
-             margin: 0 auto;
-             padding: 20px;
+             width: 100%;
              height: calc(100vh - 140px);
              display: flex;
              flex-direction: column;
+             padding: 20px;
+             max-width: none;
+             margin: 0;
          }
         
         /* 챗 윈도우 */
@@ -89,6 +90,8 @@
             box-shadow: 0 10px 40px rgba(0,0,0,0.1);
             position: relative;
             min-height: 400px;
+            width: 100%;
+            max-width: none;
         }
         
         /* 웰컴 메시지 */
@@ -98,11 +101,23 @@
             color: #666;
         }
         
-        .welcome-message i {
-            font-size: 4rem;
-            color: #667eea;
+        .welcome-chatbot-icon {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            border-radius: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 15px;
             margin-bottom: 20px;
             display: block;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .welcome-chatbot-icon:hover {
+            transform: scale(1.05);
         }
         
         .welcome-message h2 {
@@ -173,8 +188,16 @@
         }
         
         .assistant-message .message-avatar {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             color: white;
+            padding: 5px;
+        }
+        
+        .ai-avatar-img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+            border-radius: 50%;
         }
         
                  .message-bubble {
@@ -342,6 +365,17 @@
         }
         
         /* 반응형 디자인 */
+        @media (max-width: 1200px) {
+            .chat-container {
+                padding: 15px;
+            }
+            
+            .chat-window {
+                padding: 25px;
+                border-radius: 18px;
+            }
+        }
+        
         @media (max-width: 768px) {
             .chat-container {
                 padding: 10px;
@@ -349,8 +383,13 @@
             }
             
             .chat-window {
-                padding: 20px;
+                padding: 15px;
                 border-radius: 15px;
+                margin-bottom: 15px;
+            }
+            
+            .chat-header {
+                padding: 15px;
             }
             
             .chat-header h1 {
@@ -360,16 +399,94 @@
             .back-button {
                 left: 10px;
                 padding: 8px 12px;
+                font-size: 0.9rem;
             }
             
             .example-tags {
                 flex-direction: column;
                 align-items: center;
+                gap: 8px;
             }
             
             .example-tag {
-                width: 80%;
+                width: 90%;
                 text-align: center;
+                padding: 10px 16px;
+            }
+            
+            .message-bubble {
+                max-width: 90%;
+                padding: 12px 16px;
+                font-size: 0.9rem;
+            }
+            
+            .input-container {
+                padding: 12px;
+                border-radius: 20px;
+            }
+            
+            .send-button {
+                width: 45px;
+                height: 45px;
+                font-size: 1.1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .chat-container {
+                padding: 8px;
+                height: calc(100vh - 110px);
+            }
+            
+            .chat-window {
+                padding: 12px;
+                border-radius: 12px;
+                margin-bottom: 12px;
+            }
+            
+            .chat-header {
+                padding: 12px;
+            }
+            
+            .chat-header h1 {
+                font-size: 1.3rem;
+            }
+            
+            .chat-header p {
+                font-size: 0.9rem;
+            }
+            
+            .back-button {
+                left: 8px;
+                padding: 6px 10px;
+                font-size: 0.8rem;
+            }
+            
+            .example-tag {
+                width: 95%;
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+            
+            .message-bubble {
+                max-width: 95%;
+                padding: 10px 14px;
+                font-size: 0.85rem;
+            }
+            
+            .input-container {
+                padding: 10px;
+                border-radius: 18px;
+            }
+            
+            .input-field {
+                font-size: 0.9rem;
+            }
+            
+            .send-button {
+                width: 40px;
+                height: 40px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -391,7 +508,7 @@
         <div id="chat-window" class="chat-window">
             <!-- 웰컴 메시지 -->
             <div id="welcome-message" class="welcome-message">
-                <i class="fas fa-robot"></i>
+                <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi AI" class="welcome-chatbot-icon">
                 <h2>안녕하세요! Ballzzi AI 챗봇입니다</h2>
                 <p>축구 선수 정보나 HR 관련 질문을 자유롭게 물어보세요.<br>
                 아래 예시 질문을 클릭하거나 직접 입력해보세요!</p>
@@ -413,7 +530,7 @@
                         {% if msg.role == 'user' %}
                             <i class="fas fa-user"></i>
                         {% else %}
-                            <i class="fas fa-robot"></i>
+                            <img src="{% static 'icons/ballzzi.png' %}" alt="AI" class="ai-avatar-img">
                         {% endif %}
                     </div>
                     <div class="message-bubble">
@@ -559,7 +676,7 @@
 
             const avatar = document.createElement('div');
             avatar.classList.add('message-avatar');
-            avatar.innerHTML = role === 'user' ? '<i class="fas fa-user"></i>' : '<i class="fas fa-robot"></i>';
+            avatar.innerHTML = role === 'user' ? '<i class="fas fa-user"></i>' : '<img src="{% static "icons/ballzzi.png" %}" alt="AI" class="ai-avatar-img">';
 
             const bubble = document.createElement('div');
             bubble.classList.add('message-bubble');
