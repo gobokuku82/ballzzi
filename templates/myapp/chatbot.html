@@ -59,12 +59,12 @@
                 </div>
             {% endfor %}
             
-            <div id="spinner" class="spinner" style="display: none;">
-                <span>🤖 답변을 생성하는 중입니다</span>
-                <div class="loading-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
+            <div id="spinner" class="spinner-overlay" style="display: none;">
+                <div class="loading-image-container">
+                    <img src="{% static 'icons/angry_ballzzi.png' %}" class="loading-image active" alt="로딩 중...">
+                    <img src="{% static 'icons/ballzzi.png' %}" class="loading-image" alt="로딩 중...">
+                    <img src="{% static 'icons/evil_ballzzi.png' %}" class="loading-image" alt="로딩 중...">
+                    <img src="{% static 'icons/sad_ballzzi.png' %}" class="loading-image" alt="로딩 중...">
                 </div>
             </div>
         </div>
@@ -83,6 +83,10 @@
 
     <!-- JavaScript -->
     <script>
+    // 이미지 순환을 제어할 타이머 변수
+    let loadingInterval;
+    let currentLoadingIndex = 0; // 전역 변수로 선언
+
     // CSRF 토큰을 가져오는 함수 (Django 보안 필수)
     function getCookie(name) {
         let cookieValue = null;
@@ -99,6 +103,7 @@
         return cookieValue;
     }
 
+    // --- 페이지 요소 선택 ---
     const csrfToken = getCookie('csrftoken');
     const chatForm = document.getElementById('chat-form');
     const userInput = document.getElementById('user-input');
@@ -108,17 +113,63 @@
     const exampleTags = document.querySelectorAll('.example-tag');
     const submitButton = document.getElementById('submit-button');
 
-    // 예시 태그 클릭 이벤트 처리
-    exampleTags.forEach(tag => {
-        tag.addEventListener('click', () => {
-            const question = tag.dataset.question;
-            userInput.value = question;
-            chatForm.dispatchEvent(new Event('submit'));
-        });
-    });
+    // --- 핵심 기능 함수 정의 ---
 
-    // 폼 제출 이벤트
-    chatForm.addEventListener('submit', async function(e) {
+    // 답변을 화면에 추가하는 함수
+    function appendMessage(role, content, extraClass = '') {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('chat-message', role === 'user' ? 'user-message' : 'assistant-message');
+
+        const avatar = document.createElement('div');
+        avatar.classList.add('message-avatar');
+        avatar.innerHTML = role === 'user' ? '<i class="fas fa-user"></i>' : `<img src="{% static 'icons/ballzzi.png' %}" alt="AI" class="ai-avatar-img">`;
+
+        const bubble = document.createElement('div');
+        bubble.classList.add('message-bubble');
+        if (extraClass) {
+            bubble.classList.add(extraClass);
+        }
+
+        if (role === 'user') {
+            bubble.innerText = content;
+        } else {
+            bubble.innerHTML = content;
+        }
+
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(bubble);
+        chatWindow.appendChild(messageDiv);
+    }
+    
+    // 로딩 애니메이션 시작 함수
+    function startLoadingAnimation() {
+        if (!spinner) return;
+        spinner.style.display = 'flex';
+        const loadingImages = document.querySelectorAll('.loading-image');
+        currentLoadingIndex = 0; // 시작 시 0으로 초기화
+
+        if (loadingImages.length > 0) {
+            clearInterval(loadingInterval);
+            loadingImages.forEach(img => img.classList.remove('active'));
+            loadingImages[currentLoadingIndex].classList.add('active');
+
+            loadingInterval = setInterval(() => {
+                loadingImages[currentLoadingIndex].classList.remove('active');
+                currentLoadingIndex = (currentLoadingIndex + 1) % loadingImages.length;
+                loadingImages[currentLoadingIndex].classList.add('active');
+            }, 1000);
+        }
+    }
+
+    // 로딩 애니메이션 정지 함수
+    function stopLoadingAnimation() {
+        if (!spinner) return;
+        spinner.style.display = 'none';
+        clearInterval(loadingInterval);
+    }
+
+    // 서버에 질문을 보내고 답변을 처리하는 메인 함수
+    async function handleFormSubmit(e) {
         e.preventDefault();
         const prompt = userInput.value.trim();
         if (!prompt) return;
@@ -127,16 +178,15 @@
             welcomeMessage.style.display = 'none';
         }
 
-        // 사용자 메시지는 일반 텍스트로 추가
         appendMessage('user', prompt);
         userInput.value = '';
         submitButton.disabled = true;
         
-        spinner.style.display = 'flex';
+        startLoadingAnimation();
         chatWindow.scrollTop = chatWindow.scrollHeight;
 
         try {
-            const response = await fetch('{% url "myapp:chatbot_page" %}', { 
+            const response = await fetch(`{% url "myapp:chatbot_page" %}`, { 
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -150,88 +200,68 @@
             }
 
             const data = await response.json();
-            spinner.style.display = 'none';
+            
+            stopLoadingAnimation();
             submitButton.disabled = false;
 
-            // 2. AI 응답을 Markdown으로 파싱하여 추가하는 로직으로 변경
+            // 답변 종류에 따라 다른 스타일 적용
             if (data.type === 'FM') {
                 if (data.replies && data.replies.length > 0) {
                     for (const item of data.replies) {
-                        // 상세 설명 부분만 마크다운으로 변환
                         const descriptionHtml = DOMPurify.sanitize(marked.parse(item.description));
-                        // 간단한 정보 (선수 이름)
                         const summaryHtml = `<strong>${item.name}</strong>`;
-
-                        // CSS Grid를 위한 새로운 HTML 구조 생성
                         let content = `
                             <div class="response-grid-container">
-                                
                                 <div class="grid-item-image">
                                     <img src="${item.image_url || ''}" alt="${item.name} 사진" class="message-image-grid">
                                 </div>
-
                                 <div class="grid-item-summary">
                                     ${summaryHtml}
-                                    <p class="summary-position">${item.position || '공격수'}</p> </div>
-
+                                    <p class="summary-position">${item.position || '공격수'}</p>
+                                </div>
                                 <div class="grid-item-details">
                                     ${descriptionHtml}
                                 </div>
-
                             </div>
                         `;
-                        
                         appendMessage('assistant', content);
                     }
                 } else {
-                    appendMessage('assistant', '죄송합니다. 축구선수 정보를 찾을 수 없습니다. 다른 선수나 질문을 시도해보세요.');
+                    appendMessage('assistant', '죄송합니다. 축구선수 정보를 찾을 수 없습니다.');
                 }
             } else if (data.type === 'HR') {
+                // HR 답변을 위한 고정 아이콘 URL
+                const hrIconUrl = `{% static 'icons/hr_icon.png' %}`;
                 const answerHtml = DOMPurify.sanitize(marked.parse(data.answer));
-                // 'hr-bubble' 이라는 전용 클래스와 함께 메시지를 추가합니다.
+                // FM과 다른, HR 전용 레이아웃을 사용하려면 여기서 별도의 HTML 구조를 만들어야 합니다.
+                // 지금은 텍스트만 표시하는 'hr-bubble'을 사용합니다.
                 appendMessage('assistant', answerHtml, 'hr-bubble'); 
             } else {
                 const defaultAnswerHtml = DOMPurify.sanitize(marked.parse(data.answer || '죄송합니다. 응답을 처리하는 중 문제가 발생했습니다.'));
                 appendMessage('assistant', defaultAnswerHtml);
             }
+            
             chatWindow.scrollTop = chatWindow.scrollHeight;
+
         } catch (error) {
             console.error('Error sending message:', error);
-            spinner.style.display = 'none';
+            stopLoadingAnimation();
             submitButton.disabled = false;
             appendMessage('assistant', '죄송합니다. 네트워크 오류가 발생했습니다. 잠시 후 다시 시도해주세요.');
             chatWindow.scrollTop = chatWindow.scrollHeight;
         }
+    }
+
+    // --- 이벤트 리스너 등록 ---
+    chatForm.addEventListener('submit', handleFormSubmit);
+
+    exampleTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            userInput.value = tag.dataset.question;
+            chatForm.dispatchEvent(new Event('submit'));
+        });
     });
 
-    // 메시지를 채팅창에 추가하는 함수
-    function appendMessage(role, content, extraClass = '') { // 👈 3번째 매개변수 추가
-    const messageDiv = document.createElement('div');
-    messageDiv.classList.add('chat-message', role === 'user' ? 'user-message' : 'assistant-message');
-
-    const avatar = document.createElement('div');
-    avatar.classList.add('message-avatar');
-    avatar.innerHTML = role === 'user' ? '<i class="fas fa-user"></i>' : `<img src="{% static 'icons/ballzzi.png' %}" alt="AI" class="ai-avatar-img">`;
-
-    const bubble = document.createElement('div');
-    bubble.classList.add('message-bubble');
-
-    if (extraClass) { // 👈 만약 extraClass가 있으면,
-        bubble.classList.add(extraClass); // 👈 bubble에 추가합니다.
-    }
-
-    if (role === 'user') {
-        bubble.innerText = content;
-    } else {
-        bubble.innerHTML = content;
-    }
-
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(bubble);
-    chatWindow.appendChild(messageDiv);
-    }
-
-    // 엔터키로 전송
     userInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();
@@ -239,11 +269,11 @@
         }
     });
 
-    // 페이지 로드 시 입력창에 포커스
     window.addEventListener('load', function() {
         userInput.focus();
         chatWindow.scrollTop = chatWindow.scrollHeight;
     });
+
 </script>
 </body>
 </html>
