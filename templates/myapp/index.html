@@ -76,13 +76,13 @@
     {% load static %}
     <section id="video" class="video-section">
         <div class="video-container">
-            <video id="intro-video" muted loop playsinline>
+            <video id="intro-video" muted loop playsinline autoplay>
                 <source src="{% static 'video/Company_introduction.mp4' %}" type="video/mp4">
                 브라우저가 비디오 태그를 지원하지 않습니다.
             </video>
         </div>
-        <div class="container video-text-overlay">
-            </div>
+        <div class="container video-text-overlay">            
+        </div>
     </section>
 
     <!-- 서비스 선택 섹션 (1개 박스) -->
@@ -253,9 +253,52 @@
 
     <script src="{% static 'js/script.js' %}"></script>
     
-    <!-- 🎯 HERO 로고 완성 버전 -->
+    <!-- 🎯 HERO 로고 + 스크롤 네비게이션 완성 버전 -->
     <script>
-        console.log('🎯 HERO 로고 최종 버전 로드!');
+        console.log('🎯 스크롤 네비게이션 + HERO 로고 최종 버전 로드!');
+        
+        // 🎯 스크롤 네비게이션 기능 강화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('📍 스크롤 네비게이션 시스템 초기화...');
+            
+            // 모든 네비게이션 링크에 스크롤 기능 추가
+            const navLinks = document.querySelectorAll('.nav-link[href^="#"]');
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        console.log(`🎯 스크롤 이동: ${targetId}`);
+                        targetSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                        
+                        // 모바일에서 메뉴 닫기
+                        const navMenu = document.querySelector('.nav-menu');
+                        const hamburger = document.querySelector('.hamburger');
+                        if (navMenu && hamburger) {
+                            navMenu.classList.remove('active');
+                            hamburger.classList.remove('active');
+                        }
+                    }
+                });
+            });
+            
+            // 스크롤 인디케이터 기능
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                scrollIndicator.addEventListener('click', function() {
+                    console.log('🎯 스크롤 인디케이터 클릭 - 소개 섹션으로 이동');
+                    document.querySelector('#video').scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                });
+            }
+        });
         
         // Hero 로고 기능 구현
         setTimeout(() => {

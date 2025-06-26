@@ -13,6 +13,11 @@ html {
     scroll-behavior: smooth;
 }
 
+/* 스크롤 타겟 섹션들이 네비게이션 바 아래 올바른 위치에 표시되도록 조정 */
+section:not(.hero-section) {
+    scroll-margin-top: 70px; /* 네비게이션 바 높이만큼 여백 */
+}
+
 body {
     font-family: 'Noto Sans KR', sans-serif;
     line-height: 1.6;
@@ -22,8 +27,9 @@ body {
 }
 
 /* 네비게이션 바가 고정일 때 콘텐츠가 가려지지 않도록 main 태그에 여백 추가 */
+/* main 태그 패딩 제거 - 각 섹션에서 개별적으로 처리 */
 main {
-    padding-top: 70px; 
+    /* padding-top: 70px; */ 
 }
 
 .container {
@@ -248,7 +254,8 @@ main {
 
 /* --- 히어로 섹션 --- */
 .hero-section {
-    height: 100vh;
+    height: 100vh; /* 전체 뷰포트 높이 사용 */
+    height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 (브라우저 지원 시) */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     align-items: center;
@@ -257,7 +264,8 @@ main {
     color: white;
     position: relative;
     overflow: hidden;
-    margin-top: -70px; /* main의 padding-top을 상쇄하기 위해 추가 */
+    padding-top: 70px; /* 네비게이션 바 높이만큼 패딩 추가 */
+    box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
 }
 
 .hero-section::before {
@@ -422,11 +430,13 @@ section {
 .video-section {
     padding: 0; /* 기존 패딩 제거 */
     height: 100vh; /* 화면 높이를 100% 사용 */
+    height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 (브라우저 지원 시) */
     position: relative; /* 자식 요소를 위치시키기 위한 기준점 */
     overflow: hidden; /* 섹션을 벗어나는 영상 부분을 숨김 */
     display: flex; /* 텍스트 오버레이를 중앙 정렬하기 위함 */
     align-items: center;
     justify-content: center;
+    box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
 }
 
 /* 영상 컨테이너와 비디오를 화면 전체에 채우도록 설정 */
@@ -457,9 +467,41 @@ section {
 
 /* 영상 위의 텍스트에 그림자 효과를 주어 가독성 확보 */
 .video-text-overlay .section-title {
-    color: white; /* -webkit-text-fill-color 속성을 무시하고 직접 색상 지정 */
+    color: white !important; /* -webkit-text-fill-color 속성을 무시하고 직접 색상 지정 */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    background: none; /* gradient 배경 제거 */
     -webkit-text-fill-color: white;
-    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.7);
+}
+
+/* 영상 섹션에 오버레이 추가로 텍스트 가독성 향상 */
+.video-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* 반투명 검은 오버레이 */
+    z-index: 1.5;
+}
+
+/* 텍스트 오버레이를 더 위로 */
+.video-text-overlay {
+    position: relative;
+    z-index: 3; /* 오버레이보다 위에 */
+    text-align: center;
+    color: white;
+}
+
+/* 영상 섹션 추가 텍스트 */
+.video-text-overlay .section-subtitle {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 .services-section {
@@ -1375,12 +1417,48 @@ section {
     .nav-item {
         margin: 15px 0;
     }
+    /* 🎯 모바일 히어로 섹션 최적화 */
+    .hero-section {
+        height: 100vh; /* 모바일에서도 전체 화면 높이 유지 */
+        height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 */
+        padding: 70px 15px 20px 15px; /* 네비게이션 바 높이 + 좌우 여백 + 하단 여백 */
+        box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
+    }
+    
     .hero-title {
         font-size: 2.5rem;
     }
     .hero-subtitle {
         font-size: 1.1rem;
     }
+    
+    .hero-logo-img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .cta-button {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+    
+    /* 🎯 모바일 영상 섹션 최적화 */
+    .video-section {
+        height: 100vh; /* 모바일에서도 전체 화면 높이 유지 */
+        height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 */
+        box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
+    }
+    
+    .video-text-overlay .section-title {
+        font-size: 2rem !important;
+        padding: 0 20px;
+    }
+    
+    .video-text-overlay .section-subtitle {
+        font-size: 1.2rem;
+        padding: 0 20px;
+    }
+    
     .section-title {
         font-size: 2rem;
     }
@@ -1420,7 +1498,8 @@ section {
         font-size: 0.75rem;
         padding: 8px 12px;
     }
-    section {
+    /* 다른 섹션들은 기본 패딩 유지 (홈/소개 제외) */
+    section:not(.hero-section):not(.video-section) {
         padding: 60px 0;
     }
     .floating-chatbot {
