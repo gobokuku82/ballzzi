@@ -11,7 +11,7 @@ let indicators = [];
 
 // 고객 슬라이더 변수
 let currentCustomerSlide = 0;
-const totalCustomerSlides = 5;
+let totalCustomerSlides = 5; // 동적으로 계산되도록 변경
 let autoSlideInterval;
 
 // 회사 소개 슬라이더 함수들
@@ -106,6 +106,11 @@ document.addEventListener('DOMContentLoaded', function() {
     // 고객 슬라이더 초기화
     const customerSliderWrapper = document.getElementById('customerSliderWrapper');
     if (customerSliderWrapper) {
+        // 실제 고객 카드 개수 계산
+        const customerCards = customerSliderWrapper.querySelectorAll('.customer-card');
+        totalCustomerSlides = customerCards.length;
+        console.log(`🎯 고객 슬라이더 초기화: ${totalCustomerSlides}개 카드 발견`);
+        
         updateCustomerSlider();
         startAutoSlide();
         
