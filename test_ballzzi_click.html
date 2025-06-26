@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ballzzi 클릭 테스트</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 50px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .test-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            max-width: 600px;
+        }
+
+        .logo-container {
+            position: relative;
+            cursor: pointer;
+            margin: 30px 0;
+            transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 20px;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .tooltip {
+            margin-top: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .instructions {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .status {
+            margin: 20px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🏆 Ballzzi 클릭 테스트</h1>
+        
+        <div class="instructions">
+            <h3>📋 테스트 방법</h3>
+            <p>아래 Ballzzi 로고를 클릭할 때마다 이미지와 메시지가 변경되는지 확인하세요!</p>
+            <p><strong>순서:</strong> 기본 → 수줍음 → 화남 → 악독함 → 슬픔 → 부끄러움 → 기본...</p>
+        </div>
+
+        <div class="logo-container" id="test-logo">
+            <img src="static/icons/ballzzi.png" alt="Ballzzi Test" class="logo-img" id="test-image">
+        </div>
+
+        <div class="tooltip" id="test-message">안녕하세요! Ballzzi입니다 🏆</div>
+
+        <div class="status" id="status">준비 완료! 로고를 클릭해보세요.</div>
+
+        <div class="instructions">
+            <h3>🎯 확인 사항</h3>
+            <ul style="text-align: left;">
+                <li>로고 클릭 시 이미지 변경 ✓</li>
+                <li>로고 클릭 시 메시지 변경 ✓</li>
+                <li>순차적으로 6가지 상태 순환 ✓</li>
+                <li>콘솔에 로그 메시지 표시 ✓</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 다양한 감정의 ballzzi 이미지와 멘트 배열
+        const ballzziStates = [
+            {
+                image: 'static/icons/ballzzi.png',
+                message: '안녕하세요! Ballzzi입니다 🏆'
+            },
+            {
+                image: 'static/icons/shy_ballzzi.png',
+                message: '아...아니에요... 부끄러워요 😳'
+            },
+            {
+                image: 'static/icons/angry_ballzzi.png',
+                message: '으아악! 화나요! 😤'
+            },
+            {
+                image: 'static/icons/evil_ballzzi.png',
+                message: '후후후... 내 계획이 완벽해! 😈'
+            },
+            {
+                image: 'static/icons/sad_ballzzi.png',
+                message: '흑흑... 슬퍼요... 😢'
+            },
+            {
+                image: 'static/icons/shame_ballzzi.png',
+                message: '아... 민망해요... 🙈'
+            }
+        ];
+
+        // 테스트 요소들
+        const testLogo = document.getElementById('test-logo');
+        const testImage = document.getElementById('test-image');
+        const testMessage = document.getElementById('test-message');
+        const status = document.getElementById('status');
+
+        console.log('🧪 Ballzzi 클릭 테스트 시작!');
+        console.log('테스트 요소들:', {
+            testLogo: testLogo,
+            testImage: testImage,
+            testMessage: testMessage
+        });
+
+        if (testLogo && testImage && testMessage) {
+            let currentStateIndex = 0;
+            let clickCount = 0;
+
+            status.textContent = '✅ 초기화 성공! 클릭 가능합니다.';
+            status.className = 'status success';
+
+            // 로고 클릭할 때마다 다른 상태로 변경 (순환)
+            testLogo.addEventListener('click', function(e) {
+                e.preventDefault();
+                clickCount++;
+                
+                console.log(`🖱️ 클릭 #${clickCount} - 이벤트 발생!`);
+                
+                // 다음 상태로 변경 (순환)
+                currentStateIndex = (currentStateIndex + 1) % ballzziStates.length;
+                const currentState = ballzziStates[currentStateIndex];
+                
+                console.log(`🎭 상태 변경 (${currentStateIndex + 1}/6):`, currentState);
+                
+                // 이미지와 메시지 변경
+                testImage.src = currentState.image;
+                testMessage.textContent = currentState.message;
+                
+                // 상태 업데이트
+                status.textContent = `🎉 클릭 #${clickCount} 완료! 현재 상태: ${currentStateIndex + 1}/6`;
+                status.className = 'status success';
+            });
+
+            console.log('✅ 테스트 환경 준비 완료!');
+        } else {
+            console.error('❌ 테스트 요소를 찾을 수 없습니다!');
+            status.textContent = '❌ 초기화 실패! 요소를 찾을 수 없습니다.';
+            status.className = 'status error';
+        }
+    </script>
+</body>
+</html> 
