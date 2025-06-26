@@ -606,6 +606,11 @@ html {
     scroll-behavior: smooth;
 }
 
+/* 스크롤 타겟 섹션들이 네비게이션 바 아래 올바른 위치에 표시되도록 조정 */
+section:not(.hero-section) {
+    scroll-margin-top: 70px; /* 네비게이션 바 높이만큼 여백 */
+}
+
 body {
     font-family: 'Noto Sans KR', sans-serif;
     line-height: 1.6;
@@ -615,9 +620,7 @@ body {
 }
 
 /* 네비게이션 바가 고정일 때 콘텐츠가 가려지지 않도록 main 태그에 여백 추가 */
-main {
-    padding-top: 70px; 
-}
+/* main 태그 패딩 제거 - 각 섹션에서 개별적으로 처리 */
 
 .container {
     max-width: 1200px;
@@ -688,6 +691,13 @@ main {
 .nav-logo {
     display: flex;
     align-items: center;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.nav-logo:hover {
+    transform: scale(1.05);
 }
 
 .logo-img {
@@ -695,6 +705,14 @@ main {
     height: 40px;
     object-fit: contain;
     border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+/* # hover 시 이미지 변경 효과 - 추후 다른 이미지로 변경 가능 */
+.nav-logo:hover .logo-img {
+    /* # 현재는 회전 효과만 적용, 추후 background-image나 src 변경으로 이미지 교체 */
+    transform: rotate(360deg) scale(1.1);
+    filter: brightness(1.2) saturate(1.3);
 }
 
 .nav-logo h2 {
@@ -704,6 +722,56 @@ main {
     background-clip: text;
     font-weight: 700;
     font-size: 1.8rem;
+    margin-left: 10px;
+    transition: all 0.3s ease;
+}
+
+.nav-logo:hover h2 {
+    background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* # 네비게이션 로고 툴팁 스타일 */
+.nav-logo-tooltip {
+    position: absolute;
+    bottom: -45px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.nav-logo-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-bottom: 5px solid rgba(0, 0, 0, 0.9);
+}
+
+.nav-logo:hover .nav-logo-tooltip {
+    opacity: 1;
+    visibility: visible;
+    bottom: -50px;
+}
+
+/* # 툴팁 텍스트 스타일 - 추후 멘트 변경 가능 */
+.nav-logo-tooltip .tooltip-text {
+    font-weight: 500;
+    letter-spacing: 0.5px;
 }
 
 .nav-menu {
@@ -776,7 +844,8 @@ main {
 
 /* --- 히어로 섹션 --- */
 .hero-section {
-    height: 100vh;
+    height: 100vh; /* 전체 뷰포트 높이 사용 */
+    height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 (브라우저 지원 시) */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     display: flex;
     align-items: center;
@@ -785,7 +854,8 @@ main {
     color: white;
     position: relative;
     overflow: hidden;
-    margin-top: -70px; /* main의 padding-top을 상쇄하기 위해 추가 */
+    padding-top: 70px; /* 네비게이션 바 높이만큼 패딩 추가 */
+    box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
 }
 
 .hero-section::before {
@@ -828,8 +898,52 @@ main {
     transition: transform 0.3s ease;
 }
 
+.hero-logo {
+    position: relative;
+    cursor: pointer;
+}
+
 .hero-logo-img:hover {
     transform: scale(1.1);
+}
+
+/* # 히어로 로고 툴팁 스타일 */
+.hero-logo-tooltip {
+    position: absolute;
+    bottom: -70px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0, 0, 0, 0.9);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 500;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 1001;
+    max-width: 350px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.hero-logo-tooltip::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid rgba(0, 0, 0, 0.9);
+}
+
+.hero-logo:hover .hero-logo-tooltip {
+    opacity: 1;
+    visibility: visible;
+    bottom: -75px;
 }
 
 .hero-title {
@@ -900,25 +1014,84 @@ section {
 }
 
 
-/* --- 기타 메인 페이지 섹션들 --- */
+/* --- 영상 섹션 수정 --- */
+
+/* 섹션 자체를 브라우저 창 크기로 설정 */
 .video-section {
-    background: #f8f9fa;
+    padding: 0; /* 기존 패딩 제거 */
+    height: 100vh; /* 화면 높이를 100% 사용 */
+    height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 (브라우저 지원 시) */
+    position: relative; /* 자식 요소를 위치시키기 위한 기준점 */
+    overflow: hidden; /* 섹션을 벗어나는 영상 부분을 숨김 */
+    display: flex; /* 텍스트 오버레이를 중앙 정렬하기 위함 */
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
 }
-.video-container {
-    max-width: 800px;
-    margin: 0 auto;
-    border-radius: 20px;
-    overflow: hidden;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-}
-.video-container:hover {
-    transform: translateY(-10px);
-}
-.video-container video {
+
+/* 영상 컨테이너와 비디오를 화면 전체에 채우도록 설정 */
+.video-section .video-container {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    z-index: 1; /* 텍스트보다 뒤에 있도록 설정 */
+    box-shadow: none; /* 기존 그림자 제거 */
+    border-radius: 0; /* 기존 모서리 둥글기 제거 */
+}
+
+.video-section .video-container video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 영상이 컨테이너를 꽉 채우도록 비율에 맞게 조절 */
+}
+
+/* 영상 위에 올라갈 텍스트 컨테이너 */
+.video-text-overlay {
+    position: relative; /* 비디오보다 위에 있도록 설정 */
+    z-index: 2;
+    text-align: center;
+    color: white; /* 텍스트 색상을 흰색으로 변경 */
+}
+
+/* 영상 위의 텍스트에 그림자 효과를 주어 가독성 확보 */
+.video-text-overlay .section-title {
+    color: white !important; /* -webkit-text-fill-color 속성을 무시하고 직접 색상 지정 */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+    background: none; /* gradient 배경 제거 */
+    -webkit-text-fill-color: white;
+}
+
+/* 영상 섹션에 오버레이 추가로 텍스트 가독성 향상 */
+.video-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.3); /* 반투명 검은 오버레이 */
+    z-index: 1.5;
+}
+
+/* 텍스트 오버레이를 더 위로 */
+.video-text-overlay {
+    position: relative;
+    z-index: 3; /* 오버레이보다 위에 */
+    text-align: center;
+    color: white;
+}
+
+/* 영상 섹션 추가 텍스트 */
+.video-text-overlay .section-subtitle {
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 30px;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
 }
 
 .services-section {
@@ -1589,7 +1762,7 @@ section {
 
 /* --- 채팅 메시지 --- */
 .chat-message { 
-    margin-bottom: 20px; 
+    margin-bottom: 8px; 
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -1625,15 +1798,16 @@ section {
 }
 .message-bubble {
     max-width: 85%;
-    padding: 15px 20px;
+    padding: 15px 10px;
     border-radius: 20px;
     word-wrap: break-word;
-    line-height: 1.8;
+    line-height: 1;
 }
 .user-message .message-bubble {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border-bottom-right-radius: 5px;
+    font-size: 1.5rem;
 }
 .assistant-message .message-bubble {
     background: #f8f9fa;
@@ -1649,20 +1823,20 @@ section {
     /* ... 다른 속성은 그대로 ... */
     white-space: pre-wrap;
     font-size: 1.5rem; /* 폰트 크기 키움 */
-    line-height: 2; /* 줄 간격 좁힘 */
+    line-height: 1.6; /* 줄 간격 좁힘 */
 }
 
 .assistant-message .message-bubble h1,
 .assistant-message .message-bubble h2,
 .assistant-message .message-bubble h3 {
-    margin: 4px 0 4px 0; /* 제목 위아래 여백 줄임 */
+    margin: 2px 0 2px 0; /* 제목 위아래 여백 줄임 */
     color: #667eea;
     font-weight: 600;
     line-height: 1.4; /* 제목 줄간격은 별도 조정 */
 }
 
 .assistant-message .message-bubble p {
-    margin: 2px 0; /* 단락 위아래 여백 줄임 */
+    margin: 1px 0; /* 단락 위아래 여백 줄임 */
 }
 
 .assistant-message .message-bubble ul,
@@ -1672,7 +1846,7 @@ section {
 }
 
 .assistant-message .message-bubble li {
-    margin: 3px 0; /* 리스트 아이템 위아래 여백 줄임 */
+    margin: 2px 0; /* 리스트 아이템 위아래 여백 줄임 */
 }
 
 .assistant-message .message-bubble strong {
@@ -1709,9 +1883,9 @@ section {
 .assistant-message .message-bubble pre {
     background: #2d2d2d;
     color: #f8f8f2;
-    padding: 15px;
+    padding: 5px;
     border-radius: 8px;
-    margin: 15px 0;
+    margin: 5px 0;
     overflow-x: auto;
     white-space: pre-wrap;
     line-height: 1.5;
@@ -1833,12 +2007,48 @@ section {
     .nav-item {
         margin: 15px 0;
     }
+    /* 🎯 모바일 히어로 섹션 최적화 */
+    .hero-section {
+        height: 100vh; /* 모바일에서도 전체 화면 높이 유지 */
+        height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 */
+        padding: 70px 15px 20px 15px; /* 네비게이션 바 높이 + 좌우 여백 + 하단 여백 */
+        box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
+    }
+    
     .hero-title {
         font-size: 2.5rem;
     }
     .hero-subtitle {
         font-size: 1.1rem;
     }
+    
+    .hero-logo-img {
+        width: 80px;
+        height: 80px;
+    }
+    
+    .cta-button {
+        padding: 12px 30px;
+        font-size: 1rem;
+    }
+    
+    /* 🎯 모바일 영상 섹션 최적화 */
+    .video-section {
+        height: 100vh; /* 모바일에서도 전체 화면 높이 유지 */
+        height: 100dvh; /* 모바일에서 동적 뷰포트 높이 사용 */
+        box-sizing: border-box; /* 패딩을 포함하여 높이 계산 */
+    }
+    
+    .video-text-overlay .section-title {
+        font-size: 2rem !important;
+        padding: 0 20px;
+    }
+    
+    .video-text-overlay .section-subtitle {
+        font-size: 1.2rem;
+        padding: 0 20px;
+    }
+    
     .section-title {
         font-size: 2rem;
     }
@@ -1878,7 +2088,8 @@ section {
         font-size: 0.75rem;
         padding: 8px 12px;
     }
-    section {
+    /* 다른 섹션들은 기본 패딩 유지 (홈/소개 제외) */
+    section:not(.hero-section):not(.video-section) {
         padding: 60px 0;
     }
     .floating-chatbot {
@@ -2075,4 +2286,38 @@ section {
     grid-row: 2 / 3;    /* 2행 차지 */
     padding-top: 15px;
     border-top: 1px solid #f0f0f0; /* 상단 영역과 구분선 */
+}
+/* =================================================================
+   6. HR 답변 전용 스타일 (추가)
+   ================================================================= */
+
+/* HR 답변 전용 말풍선 스타일 */
+.assistant-message .hr-bubble {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 1px solid #e0e6ed;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* HR 답변 안의 제목(h2, h3 등) 스타일을 더 눈에 띄게 변경 */
+.assistant-message .hr-bubble h2,
+.assistant-message .hr-bubble h3 {
+    font-size: 1.2rem;
+    color: #3e4a6e;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #667eea;
+    margin-bottom: 2px; /* 제목과 본문 사이 간격 */
+}
+
+/* HR 답변 안의 소제목(h4, strong 등) 스타일 */
+.assistant-message .hr-bubble h4,
+.assistant-message .hr-bubble strong {
+    color: #4a5a8a;
+    font-weight: 600;
+}
+/* HR 답변 안의 리스트(ul, ol) 스타일 추가 */
+.assistant-message .hr-bubble ul,
+.assistant-message .hr-bubble ol {
+    margin-top: 3px; /* 리스트의 위쪽 여백만 따로 지정합니다. 이 값을 2px 등으로 줄여보세요. */
+    margin-bottom: 3px; /* 리스트와 그 아래 내용의 간격 */
+    padding-left: 25px;
 }
