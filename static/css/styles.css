@@ -996,7 +996,7 @@ section {
 
 /* --- 채팅 메시지 --- */
 .chat-message { 
-    margin-bottom: 20px; 
+    margin-bottom: 8px; 
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -1032,15 +1032,16 @@ section {
 }
 .message-bubble {
     max-width: 85%;
-    padding: 15px 20px;
+    padding: 15px 10px;
     border-radius: 20px;
     word-wrap: break-word;
-    line-height: 1.8;
+    line-height: 1;
 }
 .user-message .message-bubble {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     border-bottom-right-radius: 5px;
+    font-size: 1.5rem;
 }
 .assistant-message .message-bubble {
     background: #f8f9fa;
@@ -1056,20 +1057,20 @@ section {
     /* ... 다른 속성은 그대로 ... */
     white-space: pre-wrap;
     font-size: 1.5rem; /* 폰트 크기 키움 */
-    line-height: 2; /* 줄 간격 좁힘 */
+    line-height: 1.6; /* 줄 간격 좁힘 */
 }
 
 .assistant-message .message-bubble h1,
 .assistant-message .message-bubble h2,
 .assistant-message .message-bubble h3 {
-    margin: 4px 0 4px 0; /* 제목 위아래 여백 줄임 */
+    margin: 2px 0 2px 0; /* 제목 위아래 여백 줄임 */
     color: #667eea;
     font-weight: 600;
     line-height: 1.4; /* 제목 줄간격은 별도 조정 */
 }
 
 .assistant-message .message-bubble p {
-    margin: 2px 0; /* 단락 위아래 여백 줄임 */
+    margin: 1px 0; /* 단락 위아래 여백 줄임 */
 }
 
 .assistant-message .message-bubble ul,
@@ -1079,7 +1080,7 @@ section {
 }
 
 .assistant-message .message-bubble li {
-    margin: 3px 0; /* 리스트 아이템 위아래 여백 줄임 */
+    margin: 2px 0; /* 리스트 아이템 위아래 여백 줄임 */
 }
 
 .assistant-message .message-bubble strong {
@@ -1116,9 +1117,9 @@ section {
 .assistant-message .message-bubble pre {
     background: #2d2d2d;
     color: #f8f8f2;
-    padding: 15px;
+    padding: 5px;
     border-radius: 8px;
-    margin: 15px 0;
+    margin: 5px 0;
     overflow-x: auto;
     white-space: pre-wrap;
     line-height: 1.5;
@@ -1482,4 +1483,38 @@ section {
     grid-row: 2 / 3;    /* 2행 차지 */
     padding-top: 15px;
     border-top: 1px solid #f0f0f0; /* 상단 영역과 구분선 */
+}
+/* =================================================================
+   6. HR 답변 전용 스타일 (추가)
+   ================================================================= */
+
+/* HR 답변 전용 말풍선 스타일 */
+.assistant-message .hr-bubble {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 1px solid #e0e6ed;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+}
+
+/* HR 답변 안의 제목(h2, h3 등) 스타일을 더 눈에 띄게 변경 */
+.assistant-message .hr-bubble h2,
+.assistant-message .hr-bubble h3 {
+    font-size: 1.2rem;
+    color: #3e4a6e;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #667eea;
+    margin-bottom: 2px; /* 제목과 본문 사이 간격 */
+}
+
+/* HR 답변 안의 소제목(h4, strong 등) 스타일 */
+.assistant-message .hr-bubble h4,
+.assistant-message .hr-bubble strong {
+    color: #4a5a8a;
+    font-weight: 600;
+}
+/* HR 답변 안의 리스트(ul, ol) 스타일 추가 */
+.assistant-message .hr-bubble ul,
+.assistant-message .hr-bubble ol {
+    margin-top: 3px; /* 리스트의 위쪽 여백만 따로 지정합니다. 이 값을 2px 등으로 줄여보세요. */
+    margin-bottom: 3px; /* 리스트와 그 아래 내용의 간격 */
+    padding-left: 25px;
 }

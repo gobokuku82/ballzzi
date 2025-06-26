@@ -188,12 +188,12 @@
                 }
             } else if (data.type === 'HR') {
                 const answerHtml = DOMPurify.sanitize(marked.parse(data.answer));
-                appendMessage('assistant', answerHtml);
+                // 'hr-bubble' 이라는 전용 클래스와 함께 메시지를 추가합니다.
+                appendMessage('assistant', answerHtml, 'hr-bubble'); 
             } else {
                 const defaultAnswerHtml = DOMPurify.sanitize(marked.parse(data.answer || '죄송합니다. 응답을 처리하는 중 문제가 발생했습니다.'));
                 appendMessage('assistant', defaultAnswerHtml);
             }
-
             chatWindow.scrollTop = chatWindow.scrollHeight;
         } catch (error) {
             console.error('Error sending message:', error);
@@ -205,29 +205,30 @@
     });
 
     // 메시지를 채팅창에 추가하는 함수
-    function appendMessage(role, content) {
-        const messageDiv = document.createElement('div');
-        messageDiv.classList.add('chat-message');
-        messageDiv.classList.add(role === 'user' ? 'user-message' : 'assistant-message');
+    function appendMessage(role, content, extraClass = '') { // 👈 3번째 매개변수 추가
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('chat-message', role === 'user' ? 'user-message' : 'assistant-message');
 
-        const avatar = document.createElement('div');
-        avatar.classList.add('message-avatar');
-        avatar.innerHTML = role === 'user' ? '<i class="fas fa-user"></i>' : `<img src="{% static 'icons/ballzzi.png' %}" alt="AI" class="ai-avatar-img">`;
+    const avatar = document.createElement('div');
+    avatar.classList.add('message-avatar');
+    avatar.innerHTML = role === 'user' ? '<i class="fas fa-user"></i>' : `<img src="{% static 'icons/ballzzi.png' %}" alt="AI" class="ai-avatar-img">`;
 
-        const bubble = document.createElement('div');
-        bubble.classList.add('message-bubble');
+    const bubble = document.createElement('div');
+    bubble.classList.add('message-bubble');
 
-        if (role === 'user') {
-            // 사용자의 입력은 텍스트로 처리하여 HTML 태그가 실행되지 않도록 함
-            bubble.innerText = content;
-        } else {
-            // AI의 응답은 변환된 HTML을 그대로 삽입
-            bubble.innerHTML = content;
-        }
+    if (extraClass) { // 👈 만약 extraClass가 있으면,
+        bubble.classList.add(extraClass); // 👈 bubble에 추가합니다.
+    }
 
-        messageDiv.appendChild(avatar);
-        messageDiv.appendChild(bubble);
-        chatWindow.appendChild(messageDiv);
+    if (role === 'user') {
+        bubble.innerText = content;
+    } else {
+        bubble.innerHTML = content;
+    }
+
+    messageDiv.appendChild(avatar);
+    messageDiv.appendChild(bubble);
+    chatWindow.appendChild(messageDiv);
     }
 
     // 엔터키로 전송
