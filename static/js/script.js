@@ -1,5 +1,10 @@
+// 🚨 JavaScript 파일 로딩 테스트 (즉시 실행)
+console.log('🚨🚨🚨 JAVASCRIPT 파일 로드 확인! 🚨🚨🚨');
+console.log('현재 시간:', new Date().toLocaleTimeString());
+
 // DOM이 로드된 후 실행
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚨 DOM 로드 완료! ballzzi 시스템 시작!');
     
     // 햄버거 메뉴 토글
     const hamburger = document.querySelector('.hamburger');
@@ -280,6 +285,229 @@ document.addEventListener('DOMContentLoaded', function() {
     document.addEventListener('mousedown', function() {
         document.body.classList.remove('keyboard-navigation');
     });
+    
+    // Django static 경로 자동 감지
+    const getStaticPath = (filename) => {
+        const staticBase = document.querySelector('img[src*="ballzzi.png"]')?.src.replace('ballzzi.png', '') || '/static/icons/';
+        return staticBase + filename;
+    };
+
+    // 다양한 감정의 ballzzi 이미지와 멘트 배열 (공통 사용)
+    const ballzziStates = [
+        {
+            image: getStaticPath('ballzzi.png'),
+            message: '안녕하세요! Ballzzi입니다 🏆'
+        },
+        {
+            image: getStaticPath('shy_ballzzi.png'),
+            message: '아...아니에요... 부끄러워요 😳'
+        },
+        {
+            image: getStaticPath('angry_ballzzi.png'),
+            message: '으아악! 화나요! 😤'
+        },
+        {
+            image: getStaticPath('evil_ballzzi.png'),
+            message: '후후후... 내 계획이 완벽해! 😈'
+        },
+        {
+            image: getStaticPath('sad_ballzzi.png'),
+            message: '흑흑... 슬퍼요... 😢'
+        },
+        {
+            image: getStaticPath('shame_ballzzi.png'),
+            message: '아... 민망해요... 🙈'
+        }
+    ];
+
+    console.log('🎯 Static 경로 감지 결과:', ballzziStates[0].image);
+
+    // 🚨 강력한 디버깅 모드 활성화
+    console.log('=== 🔍 BALLZZI 디버깅 시작 ===');
+    console.log('1. 모든 ballzzi 상태:', ballzziStates);
+    
+    // 모든 가능한 요소 검색
+    console.log('2. 페이지의 모든 관련 요소들:');
+    console.log('- nav-logo-hover:', document.getElementById('nav-logo-hover'));
+    console.log('- logo-image:', document.getElementById('logo-image'));
+    console.log('- tooltip-message:', document.getElementById('tooltip-message'));
+    console.log('- hero-logo-hover:', document.getElementById('hero-logo-hover'));
+    console.log('- hero-logo-image:', document.getElementById('hero-logo-image'));
+    console.log('- hero-tooltip-message:', document.getElementById('hero-tooltip-message'));
+
+    // 네비게이션 로고 hover 효과 - 이미지와 멘트 변경
+    const navLogoHover = document.getElementById('nav-logo-hover');
+    const navLogoImage = document.getElementById('logo-image');
+    const navTooltipMessage = document.getElementById('tooltip-message');
+    
+    console.log('3. 네비게이션 로고 요소들:', {
+        navLogoHover: navLogoHover,
+        navLogoImage: navLogoImage,
+        navTooltipMessage: navTooltipMessage
+    });
+    
+    if (navLogoHover && navLogoImage && navTooltipMessage) {
+        console.log('네비게이션 로고 hover 효과 초기화 성공!');
+        
+        let navCurrentStateIndex = 0;
+        let isNavHovering = false;
+        
+        // 네비게이션 로고에 마우스 올릴 때마다 **랜덤** 상태로 변경
+        navLogoHover.addEventListener('mouseenter', function() {
+            isNavHovering = true;
+            console.log('네비게이션 로고 hover 이벤트 발생!');
+            
+            // 🎲 랜덤 상태 선택 (현재 상태 제외)
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * ballzziStates.length);
+            } while (randomIndex === navCurrentStateIndex && ballzziStates.length > 1);
+            
+            navCurrentStateIndex = randomIndex;
+            const currentState = ballzziStates[navCurrentStateIndex];
+            
+            console.log('네비게이션 로고 랜덤 상태 변경:', {
+                randomIndex: randomIndex,
+                emotion: currentState.message,
+                image: currentState.image
+            });
+            
+            // 이미지와 메시지 변경
+            navLogoImage.src = currentState.image;
+            navTooltipMessage.textContent = currentState.message;
+        });
+        
+        // 마우스가 벗어날 때 기본 상태로 복귀
+        navLogoHover.addEventListener('mouseleave', function() {
+            isNavHovering = false;
+            setTimeout(() => {
+                if (!isNavHovering) {
+                    // 기본 상태로 복귀
+                    navLogoImage.src = ballzziStates[0].image;
+                    navTooltipMessage.textContent = ballzziStates[0].message;
+                    navCurrentStateIndex = 0;
+                    console.log('네비게이션 로고 기본 상태로 복귀');
+                }
+            }, 500); // 0.5초 후 복귀
+        });
+        
+    } else {
+        console.log('네비게이션 로고 요소를 찾을 수 없습니다!');
+    }
+
+    // 🎯 HERO 로고 전용 디버깅 및 기능
+    console.log('=== 🎯 HERO 로고 디버깅 시작 ===');
+    
+    const heroLogoHover = document.getElementById('hero-logo-hover');
+    const heroLogoImage = document.getElementById('hero-logo-image');
+    const heroTooltipMessage = document.getElementById('hero-tooltip-message');
+    
+    console.log('HERO 요소 검색 결과:');
+    console.log('- heroLogoHover:', heroLogoHover);
+    console.log('- heroLogoImage:', heroLogoImage);
+    console.log('- heroTooltipMessage:', heroTooltipMessage);
+    
+    // 모든 이미지 요소 검색 (혹시 ID가 다를 수 있음)
+    const allImages = document.querySelectorAll('img');
+    console.log('페이지의 모든 이미지 요소들:');
+    allImages.forEach((img, index) => {
+        if (img.src.includes('ballzzi')) {
+            console.log(`${index}: ID="${img.id}", class="${img.className}", src="${img.src}"`);
+        }
+    });
+    
+    if (heroLogoHover && heroLogoImage && heroTooltipMessage) {
+        console.log('✅ 히어로 로고 모든 요소 발견! 이벤트 리스너 등록 시작...');
+        
+        let heroCurrentStateIndex = 0;
+        let isHeroHovering = false;
+        
+        // 🔥 즉시 테스트용 클릭 이벤트도 추가 (디버깅용)
+        heroLogoHover.addEventListener('click', function() {
+            console.log('🔥 HERO 로고 클릭 테스트!');
+            
+            // 랜덤 상태 선택
+            let randomIndex = Math.floor(Math.random() * ballzziStates.length);
+            const currentState = ballzziStates[randomIndex];
+            
+            console.log('클릭 테스트 상태 변경:', {
+                randomIndex: randomIndex,
+                emotion: currentState.message,
+                image: currentState.image
+            });
+            
+            // 이미지와 메시지 강제 변경
+            heroLogoImage.src = currentState.image;
+            heroTooltipMessage.textContent = currentState.message;
+            
+            // 이미지 로딩 확인
+            heroLogoImage.onload = function() {
+                console.log('✅ 이미지 로딩 성공:', this.src);
+            };
+            
+            heroLogoImage.onerror = function() {
+                console.error('❌ 이미지 로딩 실패:', this.src);
+            };
+        });
+        
+        // 히어로 로고에 마우스 올릴 때마다 **랜덤** 상태로 변경
+        heroLogoHover.addEventListener('mouseenter', function() {
+            isHeroHovering = true;
+            console.log('🎯 히어로 로고 HOVER 이벤트 발생!');
+            
+            // 🎲 랜덤 상태 선택 (현재 상태 제외)
+            let randomIndex;
+            do {
+                randomIndex = Math.floor(Math.random() * ballzziStates.length);
+            } while (randomIndex === heroCurrentStateIndex && ballzziStates.length > 1);
+            
+            heroCurrentStateIndex = randomIndex;
+            const currentState = ballzziStates[heroCurrentStateIndex];
+            
+            console.log('🎲 히어로 로고 랜덤 상태 변경:', {
+                randomIndex: randomIndex,
+                emotion: currentState.message,
+                image: currentState.image
+            });
+            
+            // 이미지와 메시지 변경
+            heroLogoImage.src = currentState.image;
+            heroTooltipMessage.textContent = currentState.message;
+            
+            // 이미지 로딩 상태 확인
+            heroLogoImage.onload = function() {
+                console.log('✅ HOVER 이미지 로딩 성공:', this.src);
+            };
+            
+            heroLogoImage.onerror = function() {
+                console.error('❌ HOVER 이미지 로딩 실패:', this.src);
+            };
+        });
+        
+        // 마우스가 벗어날 때 기본 상태로 복귀
+        heroLogoHover.addEventListener('mouseleave', function() {
+            isHeroHovering = false;
+            console.log('🚪 히어로 로고 mouseleave 이벤트');
+            
+            setTimeout(() => {
+                if (!isHeroHovering) {
+                    console.log('🔄 히어로 로고 기본 상태로 복귀 시작...');
+                    // 기본 상태로 복귀
+                    heroLogoImage.src = ballzziStates[0].image;
+                    heroTooltipMessage.textContent = ballzziStates[0].message;
+                    heroCurrentStateIndex = 0;
+                    console.log('✅ 히어로 로고 기본 상태로 복귀 완료');
+                }
+            }, 500); // 0.5초 후 복귀
+        });
+        
+    } else {
+        console.error('❌ 히어로 로고 요소를 찾을 수 없습니다!');
+        console.log('누락된 요소:');
+        if (!heroLogoHover) console.log('- hero-logo-hover 없음');
+        if (!heroLogoImage) console.log('- hero-logo-image 없음');
+        if (!heroTooltipMessage) console.log('- hero-tooltip-message 없음');
+    }
     
 });
 

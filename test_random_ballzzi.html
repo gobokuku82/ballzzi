@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ballzzi 랜덤 이미지 테스트</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            max-width: 400px;
+        }
+        .hero-logo {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .hero-logo-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+        .hero-logo:hover .hero-logo-img {
+            transform: scale(1.1);
+        }
+        .hero-logo-tooltip {
+            position: absolute;
+            bottom: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        .hero-logo-tooltip::before {
+            content: '';
+            position: absolute;
+            top: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+            border-bottom: 8px solid rgba(0, 0, 0, 0.9);
+        }
+        .hero-logo:hover .hero-logo-tooltip {
+            opacity: 1;
+            visibility: visible;
+            bottom: -65px;
+        }
+        .info {
+            margin-top: 80px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .info h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .info p {
+            color: #666;
+            line-height: 1.6;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 20px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h2>🎯 Ballzzi 랜덤 이미지 테스트</h2>
+        <p>로고에 마우스를 올려보세요!</p>
+        
+        <div class="hero-logo" id="hero-logo-hover">
+            <img src="./static/icons/ballzzi.png" alt="Ballzzi" class="hero-logo-img" id="hero-logo-image">
+            <div class="hero-logo-tooltip">
+                <span class="tooltip-text" id="hero-tooltip-message">안녕하세요! Ballzzi입니다 🏆</span>
+            </div>
+        </div>
+        
+        <div class="info">
+            <h3>📊 테스트 현황</h3>
+            <p>매번 다른 랜덤 이미지와 멘트가 나타납니다!</p>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-number" id="hover-count">0</div>
+                    <div class="stat-label">Hover 횟수</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number" id="current-emotion">기본</div>
+                    <div class="stat-label">현재 감정</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 6가지 감정 상태 배열
+        const ballzziStates = [
+            {
+                image: './static/icons/ballzzi.png',
+                message: '안녕하세요! Ballzzi입니다 🏆',
+                emotion: '기본'
+            },
+            {
+                image: './static/icons/shy_ballzzi.png',
+                message: '아...아니에요... 부끄러워요 😳',
+                emotion: '수줍음'
+            },
+            {
+                image: './static/icons/angry_ballzzi.png',
+                message: '으아악! 화나요! 😤',
+                emotion: '화남'
+            },
+            {
+                image: './static/icons/evil_ballzzi.png',
+                message: '후후후... 내 계획이 완벽해! 😈',
+                emotion: '악독함'
+            },
+            {
+                image: './static/icons/sad_ballzzi.png',
+                message: '흑흑... 슬퍼요... 😢',
+                emotion: '슬픔'
+            },
+            {
+                image: './static/icons/shame_ballzzi.png',
+                message: '아... 민망해요... 🙈',
+                emotion: '부끄러움'
+            }
+        ];
+
+        // DOM 요소들
+        const heroLogoHover = document.getElementById('hero-logo-hover');
+        const heroLogoImage = document.getElementById('hero-logo-image');
+        const heroTooltipMessage = document.getElementById('hero-tooltip-message');
+        const hoverCountElement = document.getElementById('hover-count');
+        const currentEmotionElement = document.getElementById('current-emotion');
+        
+        let hoverCount = 0;
+        let currentStateIndex = 0;
+        let isHovering = false;
+
+        console.log('🎯 테스트 파일 로드 완료!');
+        console.log('요소들:', {
+            heroLogoHover,
+            heroLogoImage,
+            heroTooltipMessage
+        });
+
+        if (heroLogoHover && heroLogoImage && heroTooltipMessage) {
+            console.log('✅ 모든 요소가 정상적으로 로드됨!');
+            
+            // 마우스 올릴 때마다 **랜덤** 이미지와 멘트 변경
+            heroLogoHover.addEventListener('mouseenter', function() {
+                isHovering = true;
+                hoverCount++;
+                
+                // 🎲 랜덤 상태 선택 (현재 상태 제외)
+                let randomIndex;
+                do {
+                    randomIndex = Math.floor(Math.random() * ballzziStates.length);
+                } while (randomIndex === currentStateIndex && ballzziStates.length > 1);
+                
+                currentStateIndex = randomIndex;
+                const currentState = ballzziStates[currentStateIndex];
+                
+                console.log('🎯 Hover 이벤트 발생!', {
+                    count: hoverCount,
+                    randomIndex,
+                    state: currentState
+                });
+                
+                // 이미지와 메시지 변경
+                heroLogoImage.src = currentState.image;
+                heroTooltipMessage.textContent = currentState.message;
+                
+                // 통계 업데이트
+                hoverCountElement.textContent = hoverCount;
+                currentEmotionElement.textContent = currentState.emotion;
+            });
+            
+            // 마우스가 벗어날 때 기본 상태로 복귀
+            heroLogoHover.addEventListener('mouseleave', function() {
+                isHovering = false;
+                setTimeout(() => {
+                    if (!isHovering) {
+                        // 기본 상태로 복귀
+                        heroLogoImage.src = ballzziStates[0].image;
+                        heroTooltipMessage.textContent = ballzziStates[0].message;
+                        currentStateIndex = 0;
+                        currentEmotionElement.textContent = ballzziStates[0].emotion;
+                        console.log('🔄 기본 상태로 복귀');
+                    }
+                }, 800); // 0.8초 후 복귀
+            });
+            
+        } else {
+            console.error('❌ 요소를 찾을 수 없습니다!');
+        }
+    </script>
+</body>
+</html> 

@@ -13,9 +13,12 @@
     <!-- 네비게이션 -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="nav-logo">
-                <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi Logo" class="logo-img">
+            <div class="nav-logo" id="nav-logo-hover">
+                <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi Logo" class="logo-img" id="logo-image">
                 <h2>Ballzzi</h2>
+                <div class="nav-logo-tooltip">
+                    <span class="tooltip-text" id="tooltip-message">안녕하세요! Ballzzi입니다 🏆</span>
+                </div>
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
@@ -54,8 +57,11 @@
     <!-- 메인 홈 섹션 -->
     <section id="home" class="hero-section">
         <div class="hero-content">
-            <div class="hero-logo">
-                <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi" class="hero-logo-img">
+            <div class="hero-logo" id="hero-logo-hover">
+                <img src="{% static 'icons/ballzzi.png' %}" alt="Ballzzi" class="hero-logo-img" id="hero-logo-image">
+                <div class="hero-logo-tooltip">
+                    <span class="tooltip-text" id="hero-tooltip-message">안녕하세요! Ballzzi입니다 🏆</span>
+                </div>
             </div>
             <h1 class="hero-title">GOLDENKICK</h1>
             <p class="hero-subtitle">고객의 승리가 우리의 승리다</p>
@@ -246,5 +252,113 @@
     </div>
 
     <script src="{% static 'js/script.js' %}"></script>
+    
+    <!-- 🎯 HERO 로고 완성 버전 -->
+    <script>
+        console.log('🎯 HERO 로고 최종 버전 로드!');
+        
+        // Hero 로고 기능 구현
+        setTimeout(() => {
+            const heroLogo = document.getElementById('hero-logo-hover');
+            const heroImage = document.getElementById('hero-logo-image');
+            const heroMessage = document.getElementById('hero-tooltip-message');
+            
+            console.log('HERO 로고 요소들:', {
+                heroLogo: heroLogo,
+                heroImage: heroImage, 
+                heroMessage: heroMessage
+            });
+            
+            if (heroLogo && heroImage && heroMessage) {
+                console.log('✅ HERO 로고 모든 요소 발견!');
+                
+                // 랜덤 이미지와 메시지 배열
+                const ballzziStates = [
+                    {
+                        image: '{% static "icons/ballzzi.png" %}',
+                        message: '안녕하세요! Ballzzi입니다 🏆'
+                    },
+                    {
+                        image: '{% static "icons/shy_ballzzi.png" %}',
+                        message: '아...아니에요... 부끄러워요 😳'
+                    },
+                    {
+                        image: '{% static "icons/angry_ballzzi.png" %}',
+                        message: '으아악! 화나요! 😤'
+                    },
+                    {
+                        image: '{% static "icons/evil_ballzzi.png" %}',
+                        message: '후후후... 내 계획이 완벽해! 😈'
+                    },
+                    {
+                        image: '{% static "icons/sad_ballzzi.png" %}',
+                        message: '흑흑... 슬퍼요... 😢'
+                    },
+                    {
+                        image: '{% static "icons/shame_ballzzi.png" %}',
+                        message: '아... 민망해요... 🙈'
+                    }
+                ];
+                
+                let currentStateIndex = 0;
+                let isHovering = false;
+                
+                // 🎯 마우스 올릴 때마다 랜덤 이미지 변경
+                heroLogo.addEventListener('mouseenter', function() {
+                    isHovering = true;
+                    console.log('🎯 HERO 로고 hover 이벤트 발생!');
+                    
+                    // 🎲 랜덤 상태 선택 (현재 상태 제외)
+                    let randomIndex;
+                    do {
+                        randomIndex = Math.floor(Math.random() * ballzziStates.length);
+                    } while (randomIndex === currentStateIndex && ballzziStates.length > 1);
+                    
+                    currentStateIndex = randomIndex;
+                    const currentState = ballzziStates[currentStateIndex];
+                    
+                    console.log('🎲 랜덤 상태 변경:', {
+                        index: randomIndex,
+                        emotion: currentState.message,
+                        image: currentState.image
+                    });
+                    
+                    // 이미지와 메시지 변경
+                    heroImage.src = currentState.image;
+                    heroMessage.textContent = currentState.message;
+                });
+                
+                // 🚪 마우스 벗어날 때 기본 상태로 복귀
+                heroLogo.addEventListener('mouseleave', function() {
+                    isHovering = false;
+                    console.log('🚪 HERO 로고 mouseleave 이벤트');
+                    
+                    setTimeout(() => {
+                        if (!isHovering) {
+                            console.log('🔄 기본 상태로 복귀');
+                            heroImage.src = ballzziStates[0].image;
+                            heroMessage.textContent = ballzziStates[0].message;
+                            currentStateIndex = 0;
+                        }
+                    }, 500); // 0.5초 후 복귀
+                });
+                
+                // 🔗 클릭 시 다른 사이트로 이동
+                heroLogo.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('🔗 HERO 로고 클릭 - 사이트 이동!');
+                    window.open('#545#', '_blank'); // 새 탭에서 열기
+                });
+                
+                // 기본 스타일 설정 (빨간 테두리 제거)
+                heroLogo.style.cursor = 'pointer';
+                heroLogo.style.border = 'none'; // 빨간 테두리 제거
+                console.log('✅ HERO 로고 설정 완료 - hover 변경 + 클릭 링크');
+                
+            } else {
+                console.error('❌ HERO 로고 요소를 찾을 수 없음!');
+            }
+        }, 1000);
+    </script>
 </body>
 </html> 
