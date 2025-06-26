@@ -1,11 +1,14 @@
 {% extends "base.html" %}
-
+{% load static%}
 {% block title %}로그아웃 - Ballzzi{% endblock %}
 
 {% block content %}
 <div class="auth-container">
     <div class="auth-form-wrapper">
-        <h1>로그아웃</h1>
+        <div class="auth-header">
+            <img src="{% static 'icons/sad_ballzzi.png' %}" alt="로고" class="auth-logo">
+            <h1>로그아웃</h1>
+        </div>
         <p>정말 로그아웃 하시겠습니까?</p>
 
         <form class="auth-form" method="post" action="{% url 'account_logout' %}">
@@ -14,4 +17,17 @@
         </form>
     </div>
 </div>
+
+<style>
+.auth-header {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트를 세로 중앙 정렬합니다. */
+    justify-content: left; /* 전체를 가로 중앙 정렬합니다. */
+    gap: 0.5rem; /* 이미지와 텍스트 사이의 간격을 줍니다. */
+}
+.auth-logo {
+    height: 2.2rem; /* h1 태그의 폰트 크기에 맞춰 이 값을 조절하세요. */
+    width: 2.2rem;  /* 높이와 너비를 같게 설정하여 정사각형으로 만듭니다. */
+}
+</style>
 {% endblock %}
