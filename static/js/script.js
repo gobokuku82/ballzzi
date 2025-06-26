@@ -1,4 +1,7 @@
-<<<<<<< HEAD
+// 🚨 JavaScript 파일 로딩 테스트 (즉시 실행)
+console.log('🚨🚨🚨 JAVASCRIPT 파일 로드 확인! 🚨🚨🚨');
+console.log('현재 시간:', new Date().toLocaleTimeString());
+
 // 회사 소개 슬라이더 변수
 let currentSlideIndex = 0;
 let slides = [];
@@ -85,11 +88,6 @@ function resetAutoSlide() {
     clearInterval(autoSlideInterval);
     startAutoSlide();
 }
-=======
-// 🚨 JavaScript 파일 로딩 테스트 (즉시 실행)
-console.log('🚨🚨🚨 JAVASCRIPT 파일 로드 확인! 🚨🚨🚨');
-console.log('현재 시간:', new Date().toLocaleTimeString());
->>>>>>> 9c306d4c8bda5295a555921b696d78a479aebdb8
 
 // DOM이 로드된 후 실행
 document.addEventListener('DOMContentLoaded', function() {
