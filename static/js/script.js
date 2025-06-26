@@ -338,3 +338,33 @@ style.textContent = `
     }
 `;
 document.head.appendChild(style); 
+document.addEventListener('DOMContentLoaded', () => {
+    const videoSection = document.querySelector('#video');
+    const video = document.querySelector('#intro-video');
+
+    // 페이지에 해당 요소들이 없으면 오류 방지를 위해 실행 중지
+    if (!videoSection || !video) {
+        return; 
+    }
+
+    // Intersection Observer 생성
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // 섹션이 화면에 보일 때
+                video.currentTime = 0; // 영상을 처음부터 다시 재생
+                video.play().catch(error => {
+                    console.error("비디오 자동 재생 실패:", error);
+                });
+            } else {
+                // 섹션이 화면에서 벗어날 때
+                video.pause();
+            }
+        });
+    }, {
+        threshold: 0.5 // 섹션이 50% 이상 보일 때 반응
+    });
+
+    // 비디오 섹션 관찰 시작
+    observer.observe(videoSection);
+});
