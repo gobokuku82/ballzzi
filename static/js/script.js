@@ -2,9 +2,139 @@
 console.log('🚨🚨🚨 JAVASCRIPT 파일 로드 확인! 🚨🚨🚨');
 console.log('현재 시간:', new Date().toLocaleTimeString());
 
+// 회사 소개 슬라이더 변수
+let currentSlideIndex = 0;
+let slides = [];
+let totalSlides = 0;
+let slidesWrapper = null;
+let indicators = [];
+
+// 고객 슬라이더 변수
+let currentCustomerSlide = 0;
+let totalCustomerSlides = 5; // 동적으로 계산되도록 변경
+let autoSlideInterval;
+
+// 회사 소개 슬라이더 함수들
+function showSlide(index) {
+    if (!slidesWrapper || totalSlides === 0) return;
+    
+    if (index >= totalSlides) currentSlideIndex = 0;
+    if (index < 0) currentSlideIndex = totalSlides - 1;
+    
+    slidesWrapper.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+    
+    // 인디케이터 업데이트
+    indicators.forEach((indicator, i) => {
+        indicator.classList.toggle('active', i === currentSlideIndex);
+    });
+    
+    // 버튼 상태 업데이트
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    if (prevBtn) prevBtn.disabled = currentSlideIndex === 0;
+    if (nextBtn) nextBtn.disabled = currentSlideIndex === totalSlides - 1;
+}
+
+function changeSlide(direction) {
+    currentSlideIndex += direction;
+    showSlide(currentSlideIndex);
+}
+
+function currentSlide(index) {
+    currentSlideIndex = index - 1;
+    showSlide(currentSlideIndex);
+}
+
+// 고객 슬라이더 함수들
+function updateCustomerSlider() {
+    const customerSliderWrapper = document.getElementById('customerSliderWrapper');
+    if (!customerSliderWrapper) return;
+    
+    const translateX = -currentCustomerSlide * 100;
+    customerSliderWrapper.style.transform = `translateX(${translateX}%)`;
+    
+    // 인디케이터 업데이트
+    const customerIndicators = document.querySelectorAll('.slider-indicators .indicator');
+    customerIndicators.forEach((indicator, index) => {
+        indicator.classList.toggle('active', index === currentCustomerSlide);
+    });
+}
+
+function nextSlide() {
+    currentCustomerSlide = (currentCustomerSlide + 1) % totalCustomerSlides;
+    updateCustomerSlider();
+    resetAutoSlide();
+}
+
+function prevSlide() {
+    currentCustomerSlide = (currentCustomerSlide - 1 + totalCustomerSlides) % totalCustomerSlides;
+    updateCustomerSlider();
+    resetAutoSlide();
+}
+
+function goToSlide(slideIndex) {
+    currentCustomerSlide = slideIndex;
+    updateCustomerSlider();
+    resetAutoSlide();
+}
+
+function startAutoSlide() {
+    autoSlideInterval = setInterval(() => {
+        nextSlide();
+    }, 10000);
+}
+
+function resetAutoSlide() {
+    clearInterval(autoSlideInterval);
+    startAutoSlide();
+}
+
 // DOM이 로드된 후 실행
 document.addEventListener('DOMContentLoaded', function() {
     console.log('🚨 DOM 로드 완료! ballzzi 시스템 시작!');
+    
+    // 회사 소개 슬라이더 초기화
+    slides = document.querySelectorAll('.intro-slide');
+    totalSlides = slides.length;
+    slidesWrapper = document.getElementById('slidesWrapper');
+    indicators = document.querySelectorAll('.slide-indicators .indicator');
+    
+    if (slidesWrapper && totalSlides > 0) {
+        showSlide(0);
+    }
+    
+    // 고객 슬라이더 초기화
+    const customerSliderWrapper = document.getElementById('customerSliderWrapper');
+    if (customerSliderWrapper) {
+        // 실제 고객 카드 개수 계산
+        const customerCards = customerSliderWrapper.querySelectorAll('.customer-card');
+        totalCustomerSlides = customerCards.length;
+        console.log(`🎯 고객 슬라이더 초기화: ${totalCustomerSlides}개 카드 발견`);
+        
+        updateCustomerSlider();
+        startAutoSlide();
+        
+        // 마우스 호버시 자동 슬라이드 일시정지
+        const sliderContainer = document.querySelector('.customers-section .slider-container');
+        if (sliderContainer) {
+            sliderContainer.addEventListener('mouseenter', () => {
+                clearInterval(autoSlideInterval);
+            });
+
+            sliderContainer.addEventListener('mouseleave', () => {
+                startAutoSlide();
+            });
+        }
+        
+        // 키보드 네비게이션
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                nextSlide();
+            }
+        });
+    }
     
     // 햄버거 메뉴 토글
     const hamburger = document.querySelector('.hamburger');

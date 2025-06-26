@@ -233,14 +233,22 @@
                 // HR 답변을 위한 고정 아이콘 URL
                 const hrIconUrl = `{% static 'icons/hr_icon.png' %}`;
                 const answerHtml = DOMPurify.sanitize(marked.parse(data.answer));
+<<<<<<< HEAD
                 // FM과 다른, HR 전용 레이아웃을 사용하려면 여기서 별도의 HTML 구조를 만들어야 합니다.
                 // 지금은 텍스트만 표시하는 'hr-bubble'을 사용합니다.
                 appendMessage('assistant', answerHtml, 'hr-bubble'); 
+=======
+                appendMessage('assistant', answerHtml);
+>>>>>>> aff545a2a49abad1cedda8e005d3e9a2dfdddbb8
             } else {
                 const defaultAnswerHtml = DOMPurify.sanitize(marked.parse(data.answer || '죄송합니다. 응답을 처리하는 중 문제가 발생했습니다.'));
                 appendMessage('assistant', defaultAnswerHtml);
             }
+<<<<<<< HEAD
             
+=======
+
+>>>>>>> aff545a2a49abad1cedda8e005d3e9a2dfdddbb8
             chatWindow.scrollTop = chatWindow.scrollHeight;
 
         } catch (error) {
@@ -262,6 +270,36 @@
         });
     });
 
+<<<<<<< HEAD
+=======
+    // 메시지를 채팅창에 추가하는 함수
+    function appendMessage(role, content) {
+        const messageDiv = document.createElement('div');
+        messageDiv.classList.add('chat-message');
+        messageDiv.classList.add(role === 'user' ? 'user-message' : 'assistant-message');
+
+        const avatar = document.createElement('div');
+        avatar.classList.add('message-avatar');
+        avatar.innerHTML = role === 'user' ? '<i class="fas fa-user"></i>' : `<img src="{% static 'icons/ballzzi.png' %}" alt="AI" class="ai-avatar-img">`;
+
+        const bubble = document.createElement('div');
+        bubble.classList.add('message-bubble');
+
+        if (role === 'user') {
+            // 사용자의 입력은 텍스트로 처리하여 HTML 태그가 실행되지 않도록 함
+            bubble.innerText = content;
+        } else {
+            // AI의 응답은 변환된 HTML을 그대로 삽입
+            bubble.innerHTML = content;
+        }
+
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(bubble);
+        chatWindow.appendChild(messageDiv);
+    }
+
+    // 엔터키로 전송
+>>>>>>> aff545a2a49abad1cedda8e005d3e9a2dfdddbb8
     userInput.addEventListener('keypress', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) {
             e.preventDefault();

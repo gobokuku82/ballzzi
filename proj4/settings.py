@@ -30,7 +30,7 @@ SECRET_KEY = 'django-insecure-fy7+m_qs8ji$o%-ruqmaw*l7q+9mgsr_tkj0u5*j+3nek03ul+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['34.47.77.200', 'www.google.com','127.0.0.1', 'localhost', 'ballzzi.duckdns.org'] # vm 외부 ip
+ALLOWED_HOSTS = ['34.47.77.200', 'www.google.com','127.0.0.1', 'localhost'] # vm 외부 ip
 
 
 # Application definition
