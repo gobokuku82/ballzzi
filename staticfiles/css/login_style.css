@@ -1,0 +1,163 @@
+/* static/css/style.css */
+
+/* --- 기본 & 공통 스타일 --- */
+:root {
+    --primary-color: #667eea; /* 포인트 색상 1 */
+    --secondary-color: #764ba2; /* 포인트 색상 2 */
+    --background-color: #f4f7f6; /* 페이지 배경색 */
+    --form-background: #ffffff; /* 폼 배경색 */
+    --text-color: #333333; /* 기본 글자색 */
+    --input-border-color: #dddddd; /* 입력창 테두리색 */
+    --button-text-color: #ffffff; /* 버튼 글자색 */
+}
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* --- 인증 페이지 전용 컨테이너 --- */
+.auth-container {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    margin-top: 80px; /* 네비게이션 바 높이 + 추가 여백 */
+}
+
+.auth-form-wrapper {
+    background-color: var(--form-background);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: left;
+}
+
+.auth-form-wrapper h1 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.auth-form-wrapper li {
+    text-align: left;
+}
+
+.auth-form-wrapper p {
+    margin-bottom: 30px;
+    color: #666;
+}
+
+/* --- 폼 스타일 --- */
+.auth-form p {
+    text-align: left;
+    margin-bottom: 15px;
+    color: #333;
+}
+.auth-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+}
+.auth-form input[type="text"],
+.auth-form input[type="email"],
+.auth-form input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--input-border-color);
+    border-radius: 5px;
+    box-sizing: border-box; /* 패딩이 너비를 넘지 않도록 설정 */
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 5px rgba(102, 126, 234, 0.5);
+}
+
+/* --- 버튼 스타일 --- */
+.form-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--button-text-color);
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.form-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* --- 링크 스타일 --- */
+.auth-links {
+    margin-top: 25px;
+}
+.auth-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+.auth-links a:hover {
+    text-decoration: underline;
+    color: var(--secondary-color);
+}
+.auth-links p {
+    margin: 10px 0 0;
+}
+
+/* --- allauth 비밀번호 도움말(ul, li) 왼쪽 정렬 --- */
+.auth-form-wrapper ul {
+    /* ul 태그 자체는 가운데 정렬된 상태에서, 그 안의 글자만 왼쪽 정렬합니다. */
+    text-align: left; 
+    
+    /* 추가: 좀 더 보기 좋게 스타일을 다듬습니다. */
+    display: inline-block; /* 부모의 가운데 정렬을 받기 위함 */
+    margin-top: 15px;      /* 위쪽 필드와의 간격 */
+    padding-left: 0;       /* 브라우저 기본 들여쓰기 제거 */
+    list-style-position: inside; /* 글머리 기호가 안으로 들어오게 함 */
+}
+
+/* li 태그 자체에도 왼쪽 정렬을 명시해줍니다. */
+.auth-form-wrapper li {
+    text-align: left;
+    margin-bottom: 8px; /* 각 항목 사이의 간격 */
+    font-size: 14px;    /* 폰트 크기 살짝 줄이기 */
+    color: #555;        /* 폰트 색상 살짝 연하게 */
+}
+
+/* static/css/auth_style.css 에 추가 또는 수정 */
+
+.form-button {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    
+    /* ✨ 이 부분을 추가/수정하세요. 30px 정도로 넉넉하게! ✨ */
+    margin-top: 30px; 
+}
+
+.form-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+}
