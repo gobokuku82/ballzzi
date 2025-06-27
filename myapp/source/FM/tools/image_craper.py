@@ -12,24 +12,41 @@ import chromedriver_autoinstaller
 import time
 import random
 import logging
+import threading
+from queue import Queue
+import asyncio
+import aiohttp
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from django.core.cache import cache
 
 # 로깅 설정
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def get_player_image_from_bing(name: str) -> Optional[str]:
-    """
-    Bing에서 축구 선수 이미지를 검색하여 URL을 반환합니다.
+# WebDriver 풀 관리
+class WebDriverPool:
+    def __init__(self, max_size=3):
+        self.max_size = max_size
+        self.pool = Queue(maxsize=max_size)
+        self.lock = threading.Lock()
     
-    Args:
-        name (str): 검색할 선수 이름
-        
-    Returns:
-        Optional[str]: 이미지 URL 또는 None (실패시)
-    """
-    try:
+    def get_driver(self):
+        try:
+            return self.pool.get_nowait()
+        except:
+            return self._create_driver()
+    
+    def return_driver(self, driver):
+        if not self.pool.full():
+            try:
+                self.pool.put_nowait(driver)
+            except:
+                driver.quit()
+        else:
+            driver.quit()
+    
+    def _create_driver(self):
         chromedriver_autoinstaller.install()
-
         options = Options()
         options.add_argument('--headless')
         options.add_argument('--disable-gpu')
@@ -39,68 +56,96 @@ def get_player_image_from_bing(name: str) -> Optional[str]:
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
         
-        # 랜덤 User-Agent 사용
         user_agents = [
             "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
             "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
         ]
         options.add_argument(f"user-agent={random.choice(user_agents)}")
-
-        driver = webdriver.Chrome(options=options)
         
-        try:
-            # 웹드라이버 숨김
-            driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
-            
-            # 검색 쿼리 다양화 (한국어 선수명 + 영어 키워드)
-            search_terms = [
-                f"football player {name}",
-                f"soccer player {name}",
-                f"{name} football",
-                f"{name} soccer player profile",
-                f"축구선수 {name}"
-            ]
-            
-            query = random.choice(search_terms).replace(" ", "+")
-            
-            # 검색 페이지 랜덤화
-            first_param = random.choice([1, 21, 41])  # 다른 페이지에서 시작
-            url = f"https://www.bing.com/images/search?q={query}&form=HDRSC2&first={first_param}"
-            
-            logger.info(f"🔍 {name} 검색 URL: {url}")
-            driver.get(url)
-            
-            # 페이지 로드 대기 (랜덤 시간)
-            time.sleep(random.uniform(2, 4))
-            
-            # 다양한 이미지 선택자 시도
-            image_urls = _extract_multiple_image_urls(driver)
-            
-            if not image_urls:
-                logger.warning(f"❌ {name}: 이미지 URL을 찾을 수 없음")
-                return None
-            
-            # 랜덤하게 이미지 선택
-            selected_url = random.choice(image_urls)
-            
-            # URL 유효성 검증
-            if _validate_image_url(selected_url):
-                logger.info(f"✅ {name}: 선택된 이미지 URL - {selected_url}")
-                return selected_url
-            else:
-                logger.warning(f"❌ {name}: 유효하지 않은 이미지 URL")
-                return None
+        driver = webdriver.Chrome(options=options)
+        driver.execute_script("Object.defineProperty(navigator, 'webdriver', {get: () => undefined})")
+        return driver
+    
+    def cleanup(self):
+        while not self.pool.empty():
+            try:
+                driver = self.pool.get_nowait()
+                driver.quit()
+            except:
+                break
 
-        except Exception as e:
-            logger.error(f"❌ {name} 이미지 검색 중 오류: {e}")
-            return None
-        finally:
-            driver.quit()
+# 전역 WebDriver 풀 인스턴스
+driver_pool = WebDriverPool()
+
+def get_player_image_from_bing(name: str) -> Optional[str]:
+    """
+    Bing에서 축구 선수 이미지를 검색하여 URL을 반환합니다.
+    캐싱을 통해 성능을 개선했습니다.
+    
+    Args:
+        name (str): 검색할 선수 이름
+        
+    Returns:
+        Optional[str]: 이미지 URL 또는 None (실패시)
+    """
+    # 캐시 확인
+    cache_key = f"player_image_{name.lower().replace(' ', '_')}"
+    cached_url = cache.get(cache_key)
+    if cached_url:
+        logger.info(f"🎯 {name}: 캐시에서 이미지 URL 반환")
+        return cached_url
+    
+    driver = driver_pool.get_driver()
+    
+    try:
             
-    except Exception as e:
-        logger.error(f"💥 {name} 크롤링 시스템 오류: {e}")
+        # 검색 쿼리 다양화 (한국어 선수명 + 영어 키워드)
+        search_terms = [
+            f"football player {name}",
+            f"soccer player {name}",
+            f"{name} football",
+            f"{name} soccer player profile",
+            f"축구선수 {name}"
+        ]
+        
+        query = random.choice(search_terms).replace(" ", "+")
+        
+        # 검색 페이지 랜덤화
+        first_param = random.choice([1, 21, 41])  # 다른 페이지에서 시작
+        url = f"https://www.bing.com/images/search?q={query}&form=HDRSC2&first={first_param}"
+        
+        logger.info(f"🔍 {name} 검색 URL: {url}")
+        driver.get(url)
+        
+        # 최소한의 대기시간으로 최적화
+        WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located((By.CSS_SELECTOR, "img"))
+        )
+            
+        # 다양한 이미지 선택자 시도
+        image_urls = _extract_multiple_image_urls(driver)
+        
+        if not image_urls:
+            logger.warning(f"❌ {name}: 이미지 URL을 찾을 수 없음")
+            return None
+        
+        # 유효한 URL 찾기 (빠른 검증)
+        for url in image_urls:
+            if _is_valid_image_url_format(url):
+                # 캐시에 저장 (24시간)
+                cache.set(cache_key, url, 60 * 60 * 24)
+                logger.info(f"✅ {name}: 선택된 이미지 URL - {url}")
+                return url
+        
+        logger.warning(f"❌ {name}: 유효한 이미지 URL을 찾을 수 없음")
         return None
+
+    except Exception as e:
+        logger.error(f"❌ {name} 이미지 검색 중 오류: {e}")
+        return None
+    finally:
+        driver_pool.return_driver(driver)
 
 def _extract_multiple_image_urls(driver) -> List[str]:
     """
@@ -194,6 +239,41 @@ def _validate_image_url(url: str) -> bool:
     except Exception as e:
         logger.debug(f"⚠️ URL 검증 실패: {e}")
         return False
+
+def get_multiple_player_images(player_names: List[str]) -> List[dict]:
+    """
+    여러 선수의 이미지를 동시에 크롤링합니다.
+    
+    Args:
+        player_names (List[str]): 검색할 선수 이름 리스트
+        
+    Returns:
+        List[dict]: {'name': str, 'image_url': str} 형태의 리스트
+    """
+    results = []
+    
+    with ThreadPoolExecutor(max_workers=3) as executor:
+        future_to_name = {
+            executor.submit(get_player_image_from_bing, name): name 
+            for name in player_names
+        }
+        
+        for future in as_completed(future_to_name):
+            name = future_to_name[future]
+            try:
+                image_url = future.result()
+                results.append({
+                    'name': name,
+                    'image_url': image_url
+                })
+            except Exception as e:
+                logger.error(f"❌ {name} 처리 중 오류: {e}")
+                results.append({
+                    'name': name,
+                    'image_url': None
+                })
+    
+    return results
 
 def get_player_image_as_pil(name: str) -> Optional[Image.Image]:
     """

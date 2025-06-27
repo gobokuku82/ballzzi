@@ -14,7 +14,7 @@ def main_view(request):
 
 from .source.question_Routing import classify
 from .source.FM.FM_GetData_LLM import get_answer_from_question
-from .source.FM.tools.image_craper import get_player_image_from_bing # FM 폴더 안의 tools 폴더에 있음
+from .source.FM.tools.image_craper import get_player_image_from_bing, get_multiple_player_images # FM 폴더 안의 tools 폴더에 있음
 from .source.HR.agents.agent_executor import process_query # HR 폴더 안의 agents 폴더에 있음
 
 # Streamlit 환경에서 필요했던 sys.modules['torch.classes'].__path__ = [] 같은 코드는
@@ -52,12 +52,19 @@ def chatbot_page(request):
             else:
                 response_type = 'FM'
                 fm_replies = get_answer_from_question(user_question)
+                
+                # 선수 이름들을 추출하여 동시에 이미지 크롤링
+                player_names = [chat_item.get('Name', '') for chat_item in fm_replies if chat_item.get('Name')]
+                image_results = get_multiple_player_images(player_names)
+                
+                # 이미지 URL을 매핑
+                image_dict = {result['name']: result['image_url'] for result in image_results}
+                
                 parsed_replies = []
                 for chat_item in fm_replies:
                     player_name = chat_item.get('Name', '')
                     description = chat_item.get('설명', '')
-                    # 이미지 크롤러는 URL을 반환하도록 로직이 변경되어야 합니다.
-                    image_url = get_player_image_from_bing(player_name)
+                    image_url = image_dict.get(player_name)
                     parsed_replies.append({
                         'name': player_name,
                         'description': description,
