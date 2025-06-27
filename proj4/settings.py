@@ -28,7 +28,7 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-fy7+m_qs8ji$o%-ruqmaw*l7q+9mgsr_tkj0u5*j+3nek03ul+'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['34.47.77.200', 'www.google.com','127.0.0.1', 'localhost', 'ballzzi.duckdns.org'] # vm 외부 ip
 
@@ -62,6 +62,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware',  # <-- 이 줄을 추가해주세요!
+    'whitenoise.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'proj4.urls'
@@ -134,6 +135,7 @@ USE_TZ = True
 import os # 맨 위에 추가
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # 프로젝트 전체의 정적 파일들을 찾을 디렉토리들을 정의합니다.
 STATICFILES_DIRS = [
@@ -145,7 +147,6 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 
 # settings.py
 

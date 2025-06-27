@@ -1,0 +1,231 @@
+{
+  "timestamp": "2025-06-27 21:27:37",
+  "test_type": "Question Routing System Test",
+  "results": [
+    {
+      "question": "손흥민에 대해 알려줘",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 42.06,
+      "status": "PASS"
+    },
+    {
+      "question": "리오넬 메시의 특징은?",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 37.82,
+      "status": "PASS"
+    },
+    {
+      "question": "호날두와 메시 중 누가 더 좋아?",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 41.23,
+      "status": "PASS"
+    },
+    {
+      "question": "최고의 수비수는 누구야?",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 33.47,
+      "status": "PASS"
+    },
+    {
+      "question": "EPL에서 떠오르는 유망주는?",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 33.57,
+      "status": "PASS"
+    },
+    {
+      "question": "드리블 잘하는 선수 추천해줘",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 33.06,
+      "status": "PASS"
+    },
+    {
+      "question": "김민재 수비 실력 어때?",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 24.92,
+      "status": "PASS"
+    },
+    {
+      "question": "이강인 패스 능력은?",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 27.84,
+      "status": "PASS"
+    },
+    {
+      "question": "황희찬 골 결정력은?",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 22.93,
+      "status": "PASS"
+    },
+    {
+      "question": "스피드 빠른 공격수 알려줘",
+      "expected_category": "FM",
+      "expected_result": "FM",
+      "actual_result": "FM",
+      "is_correct": true,
+      "response_time_ms": 23.98,
+      "status": "PASS"
+    },
+    {
+      "question": "연차는 어떻게 써요?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 24.53,
+      "status": "PASS"
+    },
+    {
+      "question": "복지 포인트는 어디서 확인해?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 27.93,
+      "status": "PASS"
+    },
+    {
+      "question": "퇴사하려면 뭐부터 해야 해?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 27.68,
+      "status": "PASS"
+    },
+    {
+      "question": "출근 시간은 몇 시인가요?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 31.7,
+      "status": "PASS"
+    },
+    {
+      "question": "재택근무 신청은 어디서?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 33.24,
+      "status": "PASS"
+    },
+    {
+      "question": "월급날 언제야?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 25.78,
+      "status": "PASS"
+    },
+    {
+      "question": "야근수당 나와요?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 41.2,
+      "status": "PASS"
+    },
+    {
+      "question": "점심시간 몇 시부터지?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 30.56,
+      "status": "PASS"
+    },
+    {
+      "question": "회사 노트북 언제 반납해요?",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 27.77,
+      "status": "PASS"
+    },
+    {
+      "question": "상여금 지급일 알려줘",
+      "expected_category": "HR",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 24.33,
+      "status": "PASS"
+    },
+    {
+      "question": "회사 축구팀 있어요?",
+      "expected_category": "BOUNDARY",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 26.71,
+      "status": "PASS"
+    },
+    {
+      "question": "직원 체육대회 언제 해요?",
+      "expected_category": "BOUNDARY",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 28.59,
+      "status": "PASS"
+    },
+    {
+      "question": "우리 회사 대표가 누구야?",
+      "expected_category": "BOUNDARY",
+      "expected_result": "HR",
+      "actual_result": "HR",
+      "is_correct": true,
+      "response_time_ms": 30.74,
+      "status": "PASS"
+    },
+    {
+      "question": "정주영에 대해 알려줘",
+      "expected_category": "BOUNDARY",
+      "expected_result": "HR",
+      "actual_result": "FM",
+      "is_correct": false,
+      "response_time_ms": 22.02,
+      "status": "FAIL"
+    },
+    {
+      "question": "축구 관련 업무 있나요?",
+      "expected_category": "BOUNDARY",
+      "expected_result": "HR",
+      "actual_result": "FM",
+      "is_correct": false,
+      "response_time_ms": 24.66,
+      "status": "FAIL"
+    }
+  ]
+}

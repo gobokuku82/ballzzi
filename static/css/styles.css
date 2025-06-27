@@ -2,134 +2,28 @@
    1. 전역 스타일 & 기본 설정 (Global Styles & Basic Settings)
    ================================================================= */
 
-/* 🎨 협력업체 제목 메인 스타일 */
-.partners-title,
-h2.partners-title,
-.footer-content .partners-title,
-.footer .partners-title {
-    /* 기본 레이아웃 */
-    display: block !important;
-    width: 100% !important;
-    text-align: center !important;
-    position: relative !important;
-    z-index: 100 !important;
-    
-    /* 타이포그래피 */
-    font-size: 3.5rem !important;
-    font-weight: 900 !important;
-    font-family: 'Noto Sans KR', 'Malgun Gothic', 'Gothic', sans-serif !important;
-    letter-spacing: 3px !important;
-    line-height: 1.2 !important;
-    
-    /* 간격 */
-    margin: 0 auto 60px auto !important;
-    padding: 20px 0 !important;
-    
-    /* 강력한 그라데이션 색상 */
-    background: linear-gradient(45deg, 
-        #ff0040, #ff8c00, #ffd700, #32cd32, 
-        #00bfff, #8a2be2, #ff1493, #00ff7f) !important;
-    background-size: 800% 800% !important;
-    -webkit-background-clip: text !important;
-    -webkit-text-fill-color: transparent !important;
-    background-clip: text !important;
-    
-    /* 강력한 그림자 효과 */
-    filter: 
-        drop-shadow(0 0 20px rgba(255, 0, 64, 0.8))
-        drop-shadow(0 0 40px rgba(255, 140, 0, 0.6))
-        drop-shadow(0 0 60px rgba(138, 43, 226, 0.4)) !important;
-    
-    /* 애니메이션 */
-    animation: 
-        mega-rainbow 3s linear infinite,
-        mega-pulse 2s ease-in-out infinite alternate,
-        mega-glow 4s ease-in-out infinite !important;
-    
-    /* 강제 표시 */
-    opacity: 1 !important;
-    visibility: visible !important;
-    transform: scale(1) !important;
+/* 🎨 협력업체 제목 - CSS 백업 스타일 (HTML 인라인 스타일이 우선 적용됨) */
+.partners-title {
+    display: block;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    font-size: 3rem;
+    font-weight: 700;
+    font-family: 'Noto Sans KR', sans-serif;
+    margin: 0 auto 40px auto;
+    padding: 15px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background-size: 200% 200%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: smooth-gradient 4s ease-in-out infinite;
 }
 
-/* 장식 요소들 */
-.partners-title::before,
-.partners-title::after {
-    content: '⭐' !important;
-    position: absolute !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    font-size: 2.5rem !important;
-    animation: mega-sparkle 2s linear infinite !important;
-    z-index: 101 !important;
-}
-
-.partners-title::before {
-    left: -80px !important;
-}
-
-.partners-title::after {
-    right: -80px !important;
-    animation-delay: 0.5s !important;
-}
-
-/* 강력한 애니메이션들 */
-@keyframes mega-rainbow {
-    0% { background-position: 0% 0%; }
-    25% { background-position: 100% 0%; }
-    50% { background-position: 100% 100%; }
-    75% { background-position: 0% 100%; }
-    100% { background-position: 0% 0%; }
-}
-
-@keyframes mega-pulse {
-    0% { 
-        transform: scale(1);
-        filter: 
-            drop-shadow(0 0 20px rgba(255, 0, 64, 0.8))
-            drop-shadow(0 0 40px rgba(255, 140, 0, 0.6));
-    }
-    100% { 
-        transform: scale(1.1);
-        filter: 
-            drop-shadow(0 0 30px rgba(255, 0, 64, 1))
-            drop-shadow(0 0 60px rgba(255, 140, 0, 0.8))
-            drop-shadow(0 0 90px rgba(138, 43, 226, 0.6));
-    }
-}
-
-@keyframes mega-glow {
-    0%, 100% {
-        text-shadow: 
-            0 0 20px rgba(255, 255, 255, 0.8),
-            0 0 40px rgba(255, 0, 64, 0.6),
-            0 0 60px rgba(138, 43, 226, 0.4);
-    }
-    50% {
-        text-shadow: 
-            0 0 40px rgba(255, 255, 255, 1),
-            0 0 80px rgba(255, 140, 0, 0.8),
-            0 0 120px rgba(0, 191, 255, 0.6);
-    }
-}
-
-@keyframes mega-sparkle {
-    0%, 100% {
-        opacity: 1;
-        transform: translateY(-50%) scale(1) rotate(0deg);
-    }
-    25% {
-        opacity: 0.7;
-        transform: translateY(-50%) scale(1.3) rotate(90deg);
-    }
-    50% {
-        opacity: 0.4;
-        transform: translateY(-50%) scale(0.8) rotate(180deg);
-    }
-    75% {
-        opacity: 0.7;
-        transform: translateY(-50%) scale(1.2) rotate(270deg);
-    }
+@keyframes smooth-gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 /* =================================================================
@@ -1478,7 +1372,7 @@ section {
 .footer {
     background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
     color: white;
-    padding: 100px 0 40px;
+    padding: 60px 0 40px; /* 상단 패딩을 100px에서 60px로 줄여서 배경 높이를 낮춤 */
     position: relative;
     overflow: hidden;
 }

@@ -10,73 +10,54 @@
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- 🚨 긴급 캐시 무효화 테스트 -->
+    <!-- ✨ GOLDENKICK 스타일과 동일한 협력업체 제목 -->
     <style>
         .partners-title {
-            background: linear-gradient(45deg, #ff0040, #ff8c00, #ffd700, #32cd32, #00bfff, #8a2be2) !important;
-            background-size: 400% 400% !important;
-            -webkit-background-clip: text !important;
-            -webkit-text-fill-color: transparent !important;
-            background-clip: text !important;
-            font-size: 4rem !important;
-            font-weight: 900 !important;
-            text-align: center !important;
-            margin: 40px 0 !important;
-            padding: 20px !important;
-            position: relative !important;
-            z-index: 999 !important;
-            animation: rainbow-flow 3s linear infinite !important;
+            /* GOLDENKICK과 동일한 기본 스타일 */
+            font-size: 4.4rem !important; /* 4rem의 110% = 4.4rem */
+            font-weight: 700 !important;
+            margin-bottom: 15px !important; /* 협력업체와 네모 사이 공백을 아주 적게 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
+            
+            /* 글자 간격 20% 증가 */
+            letter-spacing: 0.3rem !important; /* 기본값에서 20% 증가 */
+            
+            /* 레이아웃 설정 */
             display: block !important;
             width: 100% !important;
+            text-align: center !important;
+            position: relative !important;
+            z-index: 100 !important;
+            margin: 0 auto 15px auto !important; /* 하단 마진 줄임 */
+            padding: 10px 0 !important; /* 패딩도 줄임 */
+            
+            /* 색상 - 흰색 (GOLDENKICK과 동일) */
+            color: white !important;
+            
+            /* 표시 강제 */
             opacity: 1 !important;
             visibility: visible !important;
+            font-family: inherit !important;
+            line-height: 1.2 !important;
         }
         
-        .partners-title::before,
-        .partners-title::after {
-            content: '🌟' !important;
-            position: absolute !important;
-            top: 50% !important;
-            transform: translateY(-50%) !important;
-            font-size: 2rem !important;
-            animation: sparkle-test 2s linear infinite !important;
+        /* 반응형 디자인 - GOLDENKICK 스타일 기준 */
+        @media (max-width: 768px) {
+            .partners-title {
+                font-size: 3.3rem !important; /* 모바일 3rem의 110% = 3.3rem */
+                letter-spacing: 0.24rem !important; /* 20% 증가 */
+                margin-bottom: 12px !important;
+                padding: 8px 0 !important;
+            }
         }
         
-        .partners-title::before {
-            left: -60px !important;
-        }
-        
-        .partners-title::after {
-            right: -60px !important;
-            animation-delay: 1s !important;
-        }
-        
-        @keyframes rainbow-flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        @keyframes sparkle-test {
-            0%, 100% { opacity: 1; transform: translateY(-50%) scale(1); }
-            50% { opacity: 0.5; transform: translateY(-50%) scale(1.5); }
-        }
-        
-        /* 강제 표시 */
-        .footer .partners-title,
-        .footer-content .partners-title,
-        h2.partners-title {
-            display: block !important;
-            background: #ff0000 !important;
-            color: #ffffff !important;
-            border: 3px solid #00ff00 !important;
-            padding: 20px !important;
-            margin: 20px auto !important;
-            text-align: center !important;
-            font-size: 50px !important;
-            font-weight: bold !important;
-            width: 90% !important;
-            max-width: 600px !important;
+        @media (max-width: 480px) {
+            .partners-title {
+                font-size: 2.64rem !important; /* 모바일 2.4rem의 110% = 2.64rem */
+                letter-spacing: 0.18rem !important; /* 20% 증가 */
+                margin-bottom: 10px !important;
+                padding: 6px 0 !important;
+            }
         }
     </style>
 </head>
@@ -96,16 +77,16 @@
                     <a href="#home" class="nav-link">홈</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#video" class="nav-link">소개</a>
+                    <a href="#video" class="nav-link">video</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#services" class="nav-link">서비스</a>
+                    <a href="#services" class="nav-link">소개</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#features" class="nav-link">특징</a>
+                    <a href="#features" class="nav-link">서비스</a>
                 </li>
                 <li class="nav-item">
-                    <a href="#about" class="nav-link">회사정보</a>
+                    <a href="#about" class="nav-link">업적</a>
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item">
@@ -178,7 +159,7 @@
                     <!-- 슬라이드 2: 핵심 서비스 -->
                     <div class="intro-slide">
                         <div class="company-logo">
-                            <img src="{% static 'icons/ballzzi.png' %}" alt="GOLDENKICK Logo">
+                            <img src="{% static 'icons/happy_ballzzi.png' %}" alt="GOLDENKICK Logo">
                         </div>
                         <h3>핵심 서비스</h3>
                         <p class="subtitle">통합 AI 솔루션으로 효율적인 에이전시 서비스</p>
@@ -202,7 +183,7 @@
                     <!-- 슬라이드 3: 기술 혁신 -->
                     <div class="intro-slide">
                         <div class="company-logo">
-                            <img src="{% static 'icons/ballzzi.png' %}" alt="GOLDENKICK Logo">
+                            <img src="{% static 'icons/shame_ballzzi.png' %}" alt="GOLDENKICK Logo">
                         </div>
                         <h3>기술 혁신</h3>
                         <p class="subtitle">최첨단 AI 기술로 스포츠 산업의 미래를 만듭니다</p>
@@ -557,23 +538,23 @@
                 <div class="footer-social">
                     <a href="https://m.sports.naver.com/wfootball/index" class="social-link" data-tooltip="최신 축구 뉴스" target="_blank" rel="noopener noreferrer">
                         <img src="{% static 'icons/1.png' %}" alt="Social Link 1" class="social-icon-img">
-                        <div class="social-tooltip">최신 축구 뉴스</div>
+                        <div class="social-tooltip">네이버 스포츠</div>
                     </a>
-                    <a href="https://sports.news.naver.com/wfootball/schedule/index" class="social-link" data-tooltip="해외축구일정" target="_blank" rel="noopener noreferrer">
+                    <a href="https://www.uefa.com/uefachampionsleague" class="social-link" data-tooltip="챔피언스리그" target="_blank" rel="noopener noreferrer">
                         <img src="{% static 'icons/2.png' %}" alt="Social Link 2" class="social-icon-img">
-                        <div class="social-tooltip">해외축구일정</div>
-                    </a>
-                    <a href="https://m.sports.naver.com/wfootball/record/clubworldcup?seasonCode=o2Rl&tab=teamRank" class="social-link" data-tooltip="해외축구 순위" target="_blank" rel="noopener noreferrer">
-                        <img src="{% static 'icons/3.png' %}" alt="Social Link 3" class="social-icon-img">
-                        <div class="social-tooltip">해외축구 순위</div>
+                        <div class="social-tooltip">챔피언스리그</div>
                     </a>
                     <a href="https://www.transfermarkt.com" class="social-link" data-tooltip="트랜스퍼 마켓" target="_blank" rel="noopener noreferrer">
-                        <img src="{% static 'icons/4.png' %}" alt="Social Link 4" class="social-icon-img">
+                        <img src="{% static 'icons/3.png' %}" alt="Social Link 4" class="social-icon-img">
                         <div class="social-tooltip">트랜스퍼 마켓</div>
                     </a>
                     <a href="https://www.spotvnow.co.kr/football" class="social-link" data-tooltip="SpotTV" target="_blank" rel="noopener noreferrer">
-                        <img src="{% static 'icons/5.png' %}" alt="Social Link 5" class="social-icon-img">
+                        <img src="{% static 'icons/4.png' %}" alt="Social Link 5" class="social-icon-img">
                         <div class="social-tooltip">SpotTV</div>
+                    </a>                    
+                    <a href="https://www.knlondon.com" class="social-link" data-tooltip="강남런던치과" target="_blank" rel="noopener noreferrer">
+                        <img src="{% static 'icons/5.png' %}" alt="Social Link 3" class="social-icon-img">
+                        <div class="social-tooltip">강남런던치과(현>세이프플란트)</div>
                     </a>
                 </div>
             </div>
@@ -659,7 +640,7 @@
                 const ballzziStates = [
                     {
                         image: '{% static "icons/shy_ballzzi.png" %}',
-                        message: '마...말..말걸지...마...🙈 '
+                        message: '마...말..말걸지...마...💨 '
                     },
                     {
                         image: '{% static "icons/angry_ballzzi.png" %}',
