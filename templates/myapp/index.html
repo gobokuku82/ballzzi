@@ -5,10 +5,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ballzzi - RAG 기반 LLM 챗봇</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ timestamp }}">
     <link rel="stylesheet" href="{% static 'css/login_style.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- ✨ GOLDENKICK 스타일과 동일한 협력업체 제목 -->
+    <style>
+        .partners-title {
+            /* GOLDENKICK과 동일한 기본 스타일 */
+            font-size: 4.4rem !important; /* 4rem의 110% = 4.4rem */
+            font-weight: 700 !important;
+            margin-bottom: 15px !important; /* 협력업체와 네모 사이 공백을 아주 적게 */
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3) !important;
+            
+            /* 글자 간격 20% 증가 */
+            letter-spacing: 0.3rem !important; /* 기본값에서 20% 증가 */
+            
+            /* 레이아웃 설정 */
+            display: block !important;
+            width: 100% !important;
+            text-align: center !important;
+            position: relative !important;
+            z-index: 100 !important;
+            margin: 0 auto 15px auto !important; /* 하단 마진 줄임 */
+            padding: 10px 0 !important; /* 패딩도 줄임 */
+            
+            /* 색상 - 흰색 (GOLDENKICK과 동일) */
+            color: white !important;
+            
+            /* 표시 강제 */
+            opacity: 1 !important;
+            visibility: visible !important;
+            font-family: inherit !important;
+            line-height: 1.2 !important;
+        }
+        
+        /* 반응형 디자인 - GOLDENKICK 스타일 기준 */
+        @media (max-width: 768px) {
+            .partners-title {
+                font-size: 3.3rem !important; /* 모바일 3rem의 110% = 3.3rem */
+                letter-spacing: 0.24rem !important; /* 20% 증가 */
+                margin-bottom: 12px !important;
+                padding: 8px 0 !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .partners-title {
+                font-size: 2.64rem !important; /* 모바일 2.4rem의 110% = 2.64rem */
+                letter-spacing: 0.18rem !important; /* 20% 증가 */
+                margin-bottom: 10px !important;
+                padding: 6px 0 !important;
+            }
+        }
+    </style>
 </head>
 <body>
     <!-- 네비게이션 -->

@@ -3,13 +3,17 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required # ✨ 1. 이 부분을 import 합니다.
+import time
 
 import json
 
 # Create your views here.
 def main_view(request):
-    # 메인 페이지 로직
-    return render(request, 'myapp/index.html')
+    # 메인 페이지 로직 + 캐시 무효화를 위한 타임스탬프
+    context = {
+        'timestamp': int(time.time())  # 현재 타임스탬프 추가
+    }
+    return render(request, 'myapp/index.html', context)
 
 
 from .source.question_Routing import classify
