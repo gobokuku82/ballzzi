@@ -30,7 +30,19 @@
     height: 2.2rem; /* h1 태그의 폰트 크기에 맞춰 이 값을 조절하세요. */
     width: 2.2rem;  /* 높이와 너비를 같게 설정하여 정사각형으로 만듭니다. */
 }
-</style>
 
+/* Django Form Error List Styling */
+.errorlist {
+    list-style-type: none; /* 기본 리스트 마커(점) 제거 */
+    padding: 0;
+    margin: 1rem 0;
+    text-align: center; /* 텍스트를 담고 있는 리스트 자체를 가운데 정렬합니다. */
+}
+
+.errorlist li {
+    color: red; /* 글씨 색상을 빨간색으로 설정 */
+    font-weight: bold; /* 글씨를 굵게 설정 */
+}
+</style>
 
 {% endblock %}

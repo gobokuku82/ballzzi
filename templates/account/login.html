@@ -8,11 +8,19 @@
 <div class="auth-container">
     <div class="auth-form-wrapper">
         <div class="auth-header">
-            <img src="{% static 'icons/ballzzi.png' %}" alt="로고" class="auth-logo">
+            <img src="{% static 'icons/happy_ballzzi.png' %}" alt="로고" class="auth-logo">
             <h1>로그인</h1>
         </div>
 
         <p>계정이 없으신가요? <a href="{% url 'account_signup' %}">회원가입</a></p>
+
+        {% if form.non_field_errors %}
+            <div class="error-message">
+                {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
 
         <form class="auth-form" method="POST" action="{% url 'account_login' %}">
             {% csrf_token %}
@@ -31,10 +39,12 @@
             
         </form>
 
+        <hr class="auth-divider">
+
         <div class="auth-links">
-            <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
-            <a href="{% provider_login_url 'google' %}">
-                <button type="button" class="form-button" style="background: #db4437;">구글로 로그인</button>
+            <p class="social-login-title">소셜 로그인</p>
+            <a href="{% provider_login_url 'google' %}" title="구글 계정으로 로그인" class="google-login-link">
+                <img src="{% static 'icons/google-logo.png' %}" alt="구글로 로그인" class="google-login-img">
             </a>
         </div>
     </div>
@@ -50,6 +60,44 @@
 .auth-logo {
     height: 2.2rem; /* h1 태그의 폰트 크기에 맞춰 이 값을 조절하세요. */
     width: 2.2rem;  /* 높이와 너비를 같게 설정하여 정사각형으로 만듭니다. */
+}
+.error-message {
+    margin-bottom: 15px;
+    text-align: center;
+}
+.error-message p {
+    color: red;
+    margin: 0; /* p 태그의 기본 마진을 제거하여 간격을 일관되게 관리합니다. */
+}
+.auth-divider {
+    margin: 25px 0;
+    border: 0;
+    border-top: 1px solid #eee;
+}
+.auth-links {
+    text-align: center;
+}
+.social-login-title {
+    font-size: 1rem; /* 글자 크기 증가 */
+    font-weight: 500; /* 글자 굵게 */
+    color: #333; /* 글자 색상 진하게 */
+    margin-bottom: 20px; /* 로고와의 간격 증가 */
+}
+.google-login-img {
+    width: 80px; /* '소셜 로그인' 텍스트와 비슷한 너비로 조정 */
+    height: auto;
+    cursor: pointer;
+}
+.google-login-link {
+    display: inline-block; /* 테두리와 패딩을 적용하기 위해 */
+    padding: 8px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: background-color 0.2s ease-in-out;
+    line-height: 0; /* 이미지 아래 추가 공간 제거 */
+}
+.google-login-link:hover {
+    background-color: #f9f9f9; /* 마우스를 올렸을 때 배경색 변경 */
 }
 </style>
 {% endblock %}
